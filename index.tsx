@@ -50,9 +50,6 @@ app.post('/', (req, res) => {
         let sender_psid = webhook_event.sender.id;
         console.log('Sender PSID: ' + sender_psid);
         if (webhook_event.message) {
-          if(webhook_event.message.text.toLowerCase() === "@start"){
-            accessGame(sender_psid);
-          }
           handleMessage(sender_psid, webhook_event.message);        
         } else if (webhook_event.postback) {
           handlePostback(sender_psid, webhook_event.postback);
@@ -142,16 +139,24 @@ function callSendAPI(sender_psid, response) {
 function handleMessage(sender_psid, received_message) {
   let response;
   // Check if the message contains text
-  if (received_message.text) {    
+  if (received_message.text.toLowerCase() === "@start") {    
     // Create the payload for a basic text message
+    accessGame(sender_psid);
+  } else if(received_message.text.toLowerCase() === "@help"){
     response = {
-      "text": `You sent the message: "${received_message.text}". Now send me an image!`
+      "text": `
+        Các lệnh được sử dụng: \n
+        @start: bắt đầu kết nối với bot \n
+        @newgame: bắt đầu một game mới với phòng hiện tại \n
+        @endgame: kết thúc game ngay lập tức \n
+        @role_xx: xx là mã của vai trò, sẽ giúp các bạn biết về vai trò của thẻ \n
+        @role_all: tất cả các vai trò của game \n
+        @help: bộ các lệnh được sử dụng \n
+      `
     }
-  }  else if (received_message.attachments) {
-    // Gets the URL of the message attachment
-    let attachment_url = received_message.attachments[0].payload.url;
-  } 
-  
+  }else{
+
+  }
   // Sends the response message
   callSendAPI(sender_psid, response);    
 }
