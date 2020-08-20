@@ -66,6 +66,45 @@ app.post('/', (req, res) => {
   
 });
 
+function accessGame(sender_psid){
+  // Construct the message body
+  let request_body = {
+    "recipient": {
+      "id": sender_psid
+    },
+    "message":{
+      "attachment":{
+        "type":"template",
+        "payload":{
+          "template_type":"button",
+          "text":"Try the postback button!",
+          "buttons":[
+            {
+              "type":"postback",
+              "title":"Postback Button",
+              "payload":"DEVELOPER_DEFINED_PAYLOAD"
+            }
+          ]
+        }
+      }
+    }
+  }
+
+  // Send the HTTP request to the Messenger Platform
+  request({
+    "uri": "https://graph.facebook.com/v2.6/me/messages",
+    "qs": { "access_token": PAGE_ACCESS_TOKEN },
+    "method": "POST",
+    "json": request_body
+    if (!err) {
+      console.log('message sent!')
+    } else {
+      console.error("Unable to send message:" + err);
+    }
+  }); 
+}
+
+
 function callSendAPI(sender_psid, response) {
   // Construct the message body
   let request_body = {
@@ -92,7 +131,6 @@ function callSendAPI(sender_psid, response) {
 }
 
 function handleMessage(sender_psid, received_message) {
-
   let response;
   // Check if the message contains text
   if (received_message.text) {    
