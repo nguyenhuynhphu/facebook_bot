@@ -4,10 +4,11 @@
 const
   PAGE_ACCESS_TOKEN = "EAAJDVVZAcvT0BAAjWSxIooCWPk3M8ZB7t1tTdnxA27wlhoJz3YDr98qA11jfBCWQk8I2p9LvwYDtG6tUisB9rSQr3nshviwb0HLKntcZCv4XoENGscTcgEavKs0er394waPHDOePbIZB5pwZAwzMqZBWGrZAMnxlaEhY0S7LQ2ZBWwZDZD",
   express = require('express'),
+ 
   request = require('request'),
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
-import data from './roles';
+require("./roles.tsx"),
 // Adds support for GET requests to our webhook
 app.get('/', (req, res) => {
     // Your verify token. Should be a random string.
