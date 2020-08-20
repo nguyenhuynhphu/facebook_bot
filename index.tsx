@@ -165,7 +165,7 @@ function handlePostback(sender_psid, received_postback) {
   // Set the response based on the postback payload
   if (payload === '@_Join') {
     response = { "text": "You join a game, send me your key: " }
-  } else if (payload === 'no') {
+  } else if (payload === '@_Create') {
     response = { "text": "Your create a game, this is your key **************" }
   }
   // Send the message to acknowledge the postback
