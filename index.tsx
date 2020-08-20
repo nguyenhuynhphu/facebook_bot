@@ -96,6 +96,7 @@ function accessGame(sender_psid){
     "qs": { "access_token": PAGE_ACCESS_TOKEN },
     "method": "POST",
     "json": request_body
+  }, (err, res, body) => {
     if (!err) {
       console.log('message sent!')
     } else {
