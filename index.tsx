@@ -7,6 +7,7 @@ const
   request = require('request'),
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
+import data from './roles';
 // Adds support for GET requests to our webhook
 app.get('/', (req, res) => {
     // Your verify token. Should be a random string.
@@ -19,7 +20,6 @@ app.get('/', (req, res) => {
       
     // Checks if a token and mode is in the query string of the request
     if (mode && token) {
-    
       // Checks the mode and token sent is correct
       if (mode === 'subscribe' && token === VERIFY_TOKEN) {
         // Responds with the challenge token from the request
@@ -142,7 +142,15 @@ function handleMessage(sender_psid, received_message) {
   if (received_message.text.toLowerCase() === "@start") {    
     // Create the payload for a basic text message
     accessGame(sender_psid);
-  } else if(received_message.text.toLowerCase() === "@help"){
+  } else if(received_message.text.toLowerCase() === "@role_all"){
+    let tmp = "";
+    data.forEach((role) =>{
+      tmp += `${role.id}_${role.name}\n`
+    })
+    response = {
+      "text": tmp
+    }
+  }else if(received_message.text.toLowerCase() === "@help"){
     response = {
       "text": `
         Các lệnh được sử dụng:
