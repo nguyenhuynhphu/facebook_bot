@@ -50,6 +50,9 @@ app.post('/', (req, res) => {
         let sender_psid = webhook_event.sender.id;
         console.log('Sender PSID: ' + sender_psid);
         if (webhook_event.message) {
+          if(webhook_event.message.text.trim() === "@start"){
+            accessGame(sender_psid);
+          }
           handleMessage(sender_psid, webhook_event.message);        
         } else if (webhook_event.postback) {
           //handlePostback(sender_psid, webhook_event.postback);
