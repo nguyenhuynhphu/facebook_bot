@@ -146,12 +146,12 @@ function handleMessage(sender_psid, received_message) {
     response = {
       "text": `
         Các lệnh được sử dụng:
-        @start: bắt đầu kết nối với bot
-        @newgame: bắt đầu một game mới với phòng hiện tại
-        @endgame: kết thúc game ngay lập tức
-        @role_xx: xx là mã của vai trò, sẽ giúp các bạn biết về vai trò của thẻ
-        @role_all: tất cả các vai trò của game
-        @help: bộ các lệnh được sử dụng
+@start: bắt đầu kết nối với bot
+@newgame: bắt đầu một game mới với phòng hiện tại
+@endgame: kết thúc game ngay lập tức
+@role_xx: xx là mã của vai trò, sẽ giúp các bạn biết về vai trò của thẻ
+@role_all: tất cả các vai trò của game
+@help: bộ các lệnh được sử dụng \n
       `
     }
   }else{
