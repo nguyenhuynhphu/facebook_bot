@@ -5,13 +5,8 @@ const
   express = require('express'),
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
-
-app.get('/', (req, res) => {
-  res.send("Hello");
-});
 // Adds support for GET requests to our webhook
-app.get('/webhook', (req, res) => {
-
+app.get('/', (req, res) => {
     // Your verify token. Should be a random string.
     let VERIFY_TOKEN = "EAAJDVVZAcvT0BAAjWSxIooCWPk3M8ZB7t1tTdnxA27wlhoJz3YDr98qA11jfBCWQk8I2p9LvwYDtG6tUisB9rSQr3nshviwb0HLKntcZCv4XoENGscTcgEavKs0er394waPHDOePbIZB5pwZAwzMqZBWGrZAMnxlaEhY0S7LQ2ZBWwZDZD"
       
