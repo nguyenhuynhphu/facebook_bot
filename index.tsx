@@ -8,7 +8,7 @@ const
   request = require('request'),
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
-require("./roles.tsx"),
+var roles = require("./roles.tsx");
 // Adds support for GET requests to our webhook
 app.get('/', (req, res) => {
     // Your verify token. Should be a random string.
@@ -145,7 +145,7 @@ function handleMessage(sender_psid, received_message) {
     accessGame(sender_psid);
   } else if(received_message.text.toLowerCase() === "@role_all"){
     let tmp = "";
-    data.forEach((role) =>{
+    roles.forEach((role) =>{
       tmp += `${role.id}_${role.name}\n`
     })
     response = {
