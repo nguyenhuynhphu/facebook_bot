@@ -20,11 +20,9 @@ app.get('/', (req, res) => {
     
       // Checks the mode and token sent is correct
       if (mode === 'subscribe' && token === VERIFY_TOKEN) {
-        
         // Responds with the challenge token from the request
         console.log('WEBHOOK_VERIFIED');
         res.status(200).send(challenge);
-      
       } else {
         // Responds with '403 Forbidden' if verify tokens do not match
         res.sendStatus(403);      
@@ -32,7 +30,7 @@ app.get('/', (req, res) => {
     }
   });
 // Creates the endpoint for our webhook 
-app.post('/webhook', (req, res) => {  
+app.post('/', (req, res) => {  
  
     let body = req.body;
   
