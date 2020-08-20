@@ -6,6 +6,9 @@ const
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
 
+app.get('/', (req, res) => {
+  res.send("Hello");
+});
 // Adds support for GET requests to our webhook
 app.get('/webhook', (req, res) => {
 
