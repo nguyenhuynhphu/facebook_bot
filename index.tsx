@@ -50,12 +50,12 @@ app.post('/', (req, res) => {
         let sender_psid = webhook_event.sender.id;
         console.log('Sender PSID: ' + sender_psid);
         if (webhook_event.message) {
-          if(webhook_event.message.text.trim() === "@start"){
+          if(webhook_event.message.text.toLowerCase() === "@start"){
             accessGame(sender_psid);
           }
           handleMessage(sender_psid, webhook_event.message);        
         } else if (webhook_event.postback) {
-          //handlePostback(sender_psid, webhook_event.postback);
+          handlePostback(sender_psid, webhook_event.postback);
         }
         
       });
@@ -80,12 +80,17 @@ function accessGame(sender_psid){
         "type":"template",
         "payload":{
           "template_type":"button",
-          "text":"Try the postback button!",
+          "text":"Welcome to Ma Soi, choice your option !",
           "buttons":[
             {
               "type":"postback",
-              "title":"Postback Button",
-              "payload":"DEVELOPER_DEFINED_PAYLOAD"
+              "title":"Join Game",
+              "payload":"@_Join"
+            },
+            {
+              "type":"postback",
+              "title":"Create Game",
+              "payload":"@_Create"
             }
           ]
         }
@@ -149,6 +154,22 @@ function handleMessage(sender_psid, received_message) {
   
   // Sends the response message
   callSendAPI(sender_psid, response);    
+}
+
+function handlePostback(sender_psid, received_postback) {
+  let response;
+  
+  // Get the payload for the postback
+  let payload = received_postback.payload;
+
+  // Set the response based on the postback payload
+  if (payload === '@_Join') {
+    response = { "text": "You join a game, send me your key: " }
+  } else if (payload === 'no') {
+    response = { "text": "Your create a game, this is your key **************" }
+  }
+  // Send the message to acknowledge the postback
+  callSendAPI(sender_psid, response);
 }
 
 
