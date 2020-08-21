@@ -212,15 +212,11 @@ function generateKey(){
 function findRoom(sender){
   let tmp;
   gameRoomArray.forEach((room) =>{
-    console.log("Room", room.adminId);
-    console.log("sender", sender.toString());
     if(room.adminId == sender.toString()){
       console.log("MATCH");
       tmp = room;
-      console.log("INFUCTION", tmp);
     }
   })
-  console.log("OUTFUNCTION", tmp);
   return tmp;
 }
 
