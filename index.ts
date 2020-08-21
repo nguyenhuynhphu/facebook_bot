@@ -13,12 +13,15 @@ const gameRoomArray = new Map();
 gameRoomArray.set(
   "342000678",
   {
-    number_player: 0,
-    players: [],
+    number_player: null,
+    players: [
+      {name: "asdasd"}
+    ],
     adminId: "2988442917949850",
-    targets: [],
-    suspects: [],
-    usingRole: []
+    targets: null,
+    suspects: null,
+    usingRole: null,
+    roomState: ""
   }
 );
 gameRoomArray.set(
@@ -29,7 +32,8 @@ gameRoomArray.set(
     adminId: "1232132132",
     targets: [],
     suspects: [],
-    usingRole: []
+    usingRole: [],
+    roomState: ""
   }
 );
 
@@ -168,11 +172,7 @@ function handleMessage(sender_psid, received_message) {
   }else if(received_message.text.toLowerCase() === "@newgame"){
     response = Command.handelHelp();
   }else if(received_message.text.toLowerCase().includes("[") && received_message.text.toLowerCase().includes("]") ){
-    var room = findRoom(sender_psid.toString());
-    var msg = received_message.text.toLowerCase();
-    msg = msg.slice(1, msg.lastIndexOf("]"));
-    room.number_player = Number.parseInt(msg);
-    console.log("CURRENT ROOM", room);
+    setNumberPlayer(sender_psid, received_message.text);
   }else{
 
   }
@@ -195,11 +195,8 @@ function handlePostback(sender_psid, received_postback) {
     generateKey();
     response = { "text": "Your create a game, this is your key **************" }
     callSendAPI(sender_psid, response);
-    // nhập số người trong phòng
-    setTimeout(function(){
-      response = { "text": "Number of player: (Gửi với dạng: [Số người chơi], Ví dụ [8]" }
-      callSendAPI(sender_psid, response);
-    }, 2000);
+    // kieemr tra state cua phong
+    
     // chọn chức năng có trong phòng
   }
 
@@ -220,8 +217,50 @@ function findRoom(sender){
   return tmp;
 }
 
-function checkRoomState(room){
-  
+function setNumberPlayer(sender_psid, received_message){
+  var room = findRoom(sender_psid.toString());
+  if(room != undefined){
+    var msg = received_message.toLowerCase();
+    msg = msg.slice(1, msg.lastIndexOf("]"));
+    room.number_player = Number.parseInt(msg);
+    console.log("CURRENT ROOM", room);
+    checkRoomState(room, sender_psid);
+  }
+}
+
+
+function checkRoomState(room, sender_psid){
+  let response;
+  if(room.number_player == null){
+    response = { "text": "Please Enter Number of player: (Gửi với dạng: [Số người chơi], Ví dụ [8]" }
+    callSendAPI(sender_psid, response);
+    return "NUMBER_PLAYER_MISSING";
+  }
+  if(room.players == null){
+    return "NO_PLAYER_IN_ROOM";
+  }else{
+    if(room.players.length < room.number_player){
+      response = { "text": `Not enough player, ${room.players.length}/${room.number_player}` }
+      callSendAPI(sender_psid, response);
+      return "NOT_ENOUGN_PLAYER";
+    }
+  }
+  if(room.usingRole == null){
+    response = { 
+      "text": `
+        Chưa chọn vai trò, nói cho mình biết trò chơi của bạn sẽ có chức năng gì đặc biệt ?
+        Cú pháp: [Thợ săn, Phù Thủy, ...]
+        Đừng nhập sói và dân vào nhé
+      ` 
+    }
+    callSendAPI(sender_psid, response);
+    return "NOT_CHOICE_ROLE_YET";
+  }else{
+    if(room.usingRole.length < room.number_player){
+      return "NOT_ENOUGH_ROLE_FOR_PLAYER";
+    }
+  }
+  return "READY_TO_START";
 }
 
 // Sets server port and logs message on success
