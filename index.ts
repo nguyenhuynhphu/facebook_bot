@@ -141,7 +141,11 @@ function handleMessage(sender_psid, received_message) {
   if (received_message.text.toLowerCase() === "@start") {
     // kết nối với bot
     accessGame(sender_psid);
-  } else if(received_message.text.toLowerCase() === "@role_all"){
+  }else if(received_message.text.toLowerCase() === "@all_room"){
+    response = {
+      "text": gameRoomArray
+    }
+  }else if(received_message.text.toLowerCase() === "@role_all"){
     response = Command.handelRoleAll();
   }else if(received_message.text.toLowerCase() === "@help"){
     response = Command.handelHelp();
