@@ -12,7 +12,7 @@ const
 // var Room = require('./models/Room');
 const gameRoomArray = new Map();
 gameRoomArray.set(
-  "2988442917949850",
+  "342000678",
   {
     number_player: 8,
     players: [],
@@ -201,7 +201,7 @@ function generateKey(){
 
 function findRoom(sender){
   gameRoomArray.forEach((room) =>{
-    if(room.adminId === sender){
+    if(room.adminId === sender.toString()){
       return room;
     }
   })
