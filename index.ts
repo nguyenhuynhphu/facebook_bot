@@ -13,7 +13,14 @@ const
 const gameRoomArray = new Map();
 gameRoomArray.set(
   "2988442917949850",
-  new Room(8, [], "2988442917949850", [], [], [])
+  {
+    number_player: 8,
+    players: [],
+    adminId: "2988442917949850",
+    targets: [],
+    suspects: [],
+    usingRole: []
+  }
 );
 
 // Adds support for GET requests to our webhook
@@ -142,7 +149,8 @@ function handleMessage(sender_psid, received_message) {
     // kết nối với bot
     accessGame(sender_psid);
   }else if(received_message.text.toLowerCase() === "@all_room"){
-    console.log(gameRoomArray);
+    console.log("ALL ROOM", gameRoomArray);
+    console.log("My ROOM", findRoom(sender_psid));
   }else if(received_message.text.toLowerCase() === "@role_all"){
     response = Command.handelRoleAll();
   }else if(received_message.text.toLowerCase() === "@help"){
