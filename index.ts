@@ -237,15 +237,15 @@ function checkRoomState(room, sender_psid){
     callSendAPI(sender_psid, response);
     return "NUMBER_PLAYER_MISSING";
   }
-  if(room.players == null){
-    return "NO_PLAYER_IN_ROOM";
-  }else{
-    if(room.players.length < room.number_player){
-      response = { "text": `Not enough player, ${room.players.length}/${room.number_player}` }
-      callSendAPI(sender_psid, response);
-      return "NOT_ENOUGN_PLAYER";
-    }
-  }
+  // if(room.players == null){
+  //   return "NO_PLAYER_IN_ROOM";
+  // }else{
+  //   if(room.players.length < room.number_player){
+  //     response = { "text": `Not enough player, ${room.players.length}/${room.number_player}` }
+  //     callSendAPI(sender_psid, response);
+  //     return "NOT_ENOUGN_PLAYER";
+  //   }
+  // }
   if(room.usingRole == null){
     response = { 
       "text": `
