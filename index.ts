@@ -13,7 +13,7 @@ const gameRoomArray = new Map();
 gameRoomArray.set(
   "342000678",
   {
-    number_player: 8,
+    number_player: 0,
     players: [],
     adminId: "2988442917949850",
     targets: [],
@@ -167,12 +167,12 @@ function handleMessage(sender_psid, received_message) {
     response = Command.handelHelp();
   }else if(received_message.text.toLowerCase() === "@newgame"){
     response = Command.handelHelp();
-  }else if(received_message.text.toLowerCase() === "number"){
+  }else if(received_message.text.toLowerCase().includes("[") && received_message.text.toLowerCase().includes("]") ){
     var room = findRoom(sender_psid.toString());
-    //room.number_player = 8;
-    response = {
-      "text" : room
-    }
+    var msg = received_message.text.toLowerCase();
+    msg = msg.slice(1, msg.lastIndexOf("]"));
+    room.number_player = Number.parseInt(msg);
+    console.log("CURRENT ROOM", room);
   }else{
 
   }
