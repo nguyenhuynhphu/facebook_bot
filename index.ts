@@ -171,8 +171,10 @@ function handleMessage(sender_psid, received_message) {
     response = Command.handelHelp();
   }else if(received_message.text.toLowerCase() === "@newgame"){
     response = Command.handelHelp();
-  }else if(received_message.text.toLowerCase().includes("[") && received_message.text.toLowerCase().includes("]") ){
+  }else if(received_message.text.toLowerCase().includes("L[") && received_message.text.toLowerCase().includes("]") ){
     setNumberPlayer(sender_psid, received_message.text);
+  }else if(received_message.text.toLowerCase().includes("R[") && received_message.text.toLowerCase().includes("]") ){
+    setRoles(sender_psid, received_message.text);
   }else{
 
   }
@@ -222,7 +224,7 @@ function setNumberPlayer(sender_psid, received_message){
   var room = findRoom(sender_psid.toString());
   if(room != undefined){
     var msg = received_message.toLowerCase();
-    msg = msg.slice(1, msg.lastIndexOf("]"));
+    msg = msg.slice(2, msg.lastIndexOf("]"));
     room.number_player = Number.parseInt(msg);
     console.log("SET NUMBER PLAYER", room);
     checkRoomState(room, sender_psid);
@@ -249,7 +251,7 @@ function setRoles(sender_psid, received_message){
 function checkRoomState(room, sender_psid){
   let response;
   if(room.number_player == null){
-    response = { "text": "Please Enter Number of player: (Gửi với dạng: [Số người chơi], Ví dụ [8]" }
+    response = { "text": "Please Enter Number of player: (Gửi với dạng: L[Số người chơi], Ví dụ L[8]" }
     callSendAPI(sender_psid, response);
     return "NUMBER_PLAYER_MISSING";
   }
@@ -266,9 +268,9 @@ function checkRoomState(room, sender_psid){
     response = { 
       "text": `
         Chưa chọn vai trò, nói cho mình biết trò chơi của bạn sẽ có chức năng gì đặc biệt ?
-      Cú pháp: R[Thợ săn, Phù Thủy, Dân Làng, Sói],
-      Mình sẽ nhập số lượng sao nhé !
-      Nếu bạn không nhớ chức năng, gửi @role_all để mình giúp bạn !
+  Cú pháp: R[Thợ săn, Phù Thủy, Dân Làng, Sói]
+  Mình sẽ nhập số lượng sau nhé !
+  Nếu bạn không nhớ chức năng, gửi @role_all để mình giúp bạn !
       ` 
     }
     callSendAPI(sender_psid, response);
