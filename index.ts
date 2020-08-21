@@ -153,7 +153,7 @@ function handleMessage(sender_psid, received_message) {
     response = Command.handelHelp();
   }else if(received_message.text.toLowerCase() === "number"){
     var room = findRoom(sender_psid.toString());
-    room.number_player = 8;
+    //room.number_player = 8;
     response = {
       "text" : room
     }
