@@ -171,9 +171,9 @@ function handleMessage(sender_psid, received_message) {
     response = Command.handelHelp();
   }else if(received_message.text.toLowerCase() === "@newgame"){
     response = Command.handelHelp();
-  }else if(received_message.text.toLowerCase().includes("L[") && received_message.text.toLowerCase().includes("]") ){
+  }else if(received_message.text.toLowerCase().includes("l[") && received_message.text.toLowerCase().includes("]") ){
     setNumberPlayer(sender_psid, received_message.text);
-  }else if(received_message.text.toLowerCase().includes("R[") && received_message.text.toLowerCase().includes("]") ){
+  }else if(received_message.text.toLowerCase().includes("r[") && received_message.text.toLowerCase().includes("]") ){
     setRoles(sender_psid, received_message.text);
   }else{
 
