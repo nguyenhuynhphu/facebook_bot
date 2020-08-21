@@ -2,15 +2,15 @@
   "name": "messenger-webhook",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "node index.tsx",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "node ./server/bin/www"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^14.6.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "request": "^2.88.2"
