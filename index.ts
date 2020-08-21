@@ -224,7 +224,23 @@ function setNumberPlayer(sender_psid, received_message){
     var msg = received_message.toLowerCase();
     msg = msg.slice(1, msg.lastIndexOf("]"));
     room.number_player = Number.parseInt(msg);
-    console.log("CURRENT ROOM", room);
+    console.log("SET NUMBER PLAYER", room);
+    checkRoomState(room, sender_psid);
+  }
+}
+
+function setRoles(sender_psid, received_message){
+  var room = findRoom(sender_psid.toString());
+  if(room != undefined){
+    var msg = received_message.toLowerCase();
+    msg = msg = msg.slice(2, msg.lastIndexOf("]"));
+    let usingRole = msg.split(",");
+    usingRole.forEach(element => {
+      if(room.usingRole == null)
+        room.usingRole = new Array();
+      room.usingRole.push(element.trim());
+    });
+    console.log("SET ROLES", room);
     checkRoomState(room, sender_psid);
   }
 }
@@ -250,8 +266,9 @@ function checkRoomState(room, sender_psid){
     response = { 
       "text": `
         Chưa chọn vai trò, nói cho mình biết trò chơi của bạn sẽ có chức năng gì đặc biệt ?
-        Cú pháp: [Thợ săn, Phù Thủy, ...]
-        Đừng nhập sói và dân vào nhé
+      Cú pháp: R[Thợ săn, Phù Thủy, Dân Làng, Sói],
+      Mình sẽ nhập số lượng sao nhé !
+      Nếu bạn không nhớ chức năng, gửi @role_all để mình giúp bạn !
       ` 
     }
     callSendAPI(sender_psid, response);
