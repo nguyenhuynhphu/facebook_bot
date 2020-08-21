@@ -22,6 +22,17 @@ gameRoomArray.set(
     usingRole: []
   }
 );
+gameRoomArray.set(
+  "123456789",
+  {
+    number_player: 25,
+    players: [],
+    adminId: "2988442917849850",
+    targets: [],
+    suspects: [],
+    usingRole: []
+  }
+);
 
 // Adds support for GET requests to our webhook
 app.get('/', (req, res) => {
@@ -150,7 +161,7 @@ function handleMessage(sender_psid, received_message) {
     accessGame(sender_psid);
   }else if(received_message.text.toLowerCase() === "@all_room"){
     console.log("ALL ROOM", gameRoomArray);
-    console.log("My ROOM", findRoom(sender_psid.id));
+    console.log("My ROOM", findRoom(sender_psid));
   }else if(received_message.text.toLowerCase() === "@role_all"){
     response = Command.handelRoleAll();
   }else if(received_message.text.toLowerCase() === "@help"){
@@ -202,7 +213,9 @@ function generateKey(){
 function findRoom(sender){
   gameRoomArray.forEach((room) =>{
     console.log("Room", room.adminId);
+    console.log("sender", sender.toString());
     if(room.adminId == sender.toString()){
+      console.log("MATCH");
       return room;
     }
   })
