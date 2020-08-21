@@ -216,9 +216,10 @@ function findRoom(sender){
     console.log("sender", sender.toString());
     if(room.adminId == sender.toString()){
       console.log("MATCH");
-      tmp = gameRoomArray.get(sender);
+      tmp = gameRoomArray.get(sender).assign();
     }
   })
+  console
   return tmp;
 }
 
