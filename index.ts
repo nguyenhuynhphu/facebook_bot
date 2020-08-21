@@ -201,7 +201,8 @@ function generateKey(){
 
 function findRoom(sender){
   gameRoomArray.forEach((room) =>{
-    if(room.adminId === sender.toString()){
+    console.log("Room", room.adminId);
+    if(room.adminId == sender.toString()){
       return room;
     }
   })
