@@ -150,7 +150,7 @@ function handleMessage(sender_psid, received_message) {
     accessGame(sender_psid);
   }else if(received_message.text.toLowerCase() === "@all_room"){
     console.log("ALL ROOM", gameRoomArray);
-    console.log("My ROOM", findRoom(sender_psid));
+    console.log("My ROOM", findRoom(sender_psid.id));
   }else if(received_message.text.toLowerCase() === "@role_all"){
     response = Command.handelRoleAll();
   }else if(received_message.text.toLowerCase() === "@help"){
