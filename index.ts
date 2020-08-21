@@ -196,7 +196,8 @@ function handlePostback(sender_psid, received_postback) {
     response = { "text": "Your create a game, this is your key **************" }
     callSendAPI(sender_psid, response);
     // kieemr tra state cua phong
-    
+    var room = findRoom(sender_psid);
+    checkRoomState(room, sender_psid);
     // chọn chức năng có trong phòng
   }
 
