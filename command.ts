@@ -1,6 +1,6 @@
 
-let roles = require("./roles.tsx");
-class Command {
+let roles = require("./roles.ts");
+module.exports = class Command {
     static handelHelp(){
         return {
             "text": `
