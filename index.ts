@@ -26,7 +26,7 @@ gameRoomArray.set(
   {
     number_player: 25,
     players: [],
-    adminId: "2988442917849850",
+    adminId: "1232132132",
     targets: [],
     suspects: [],
     usingRole: []
@@ -218,7 +218,6 @@ function findRoom(sender){
       return room;
     }
   })
-  return null;
 }
 
 function checkRoomState(room){
