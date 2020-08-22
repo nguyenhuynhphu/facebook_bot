@@ -238,7 +238,7 @@ function createRoom(sender_psid){
 function getRoomByRoomID(searchValue) {
   let tmp;
   gameRoomArray.forEach(element => {
-    if (element.roomId === searchValue){
+    if (element.roomId.toString() == searchValue){
       console.log(typeof(element.roomId));
       console.log(typeof(searchValue));
       tmp = element;
