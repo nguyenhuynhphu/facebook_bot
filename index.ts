@@ -237,10 +237,14 @@ function createRoom(sender_psid){
 
 function getRoomByRoomID(searchValue) {
   let tmp;
-  for (let [key, value] of gameRoomArray.entries()) {
-    if (value.roomId === searchValue)
-      tmp = gameRoomArray.get(key);
-  }
+  gameRoomArray.forEach(element => {
+    if (element.roomId === searchValue){
+      console.log(typeof(element.roomId));
+      console.log(typeof(searchValue));
+      tmp = element;
+    }
+  });
+  console.log("Admin", tmp);
   return tmp;
 }
 
@@ -251,7 +255,7 @@ function joinRoom(sender,text){
   msg = msg.slice(2, msg.lastIndexOf("]"));
 
   let room = getRoomByRoomID(msg); 
-  console.log("Admin", room.roomId);
+  
 	if (getRoomByRoomID(msg) != undefined){
 		if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
 			let newPlayer = new Player(sender,true,false,"",msg);
