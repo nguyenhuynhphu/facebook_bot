@@ -13,8 +13,6 @@ const
 const gameRoomArray = new Map();
 let systemRoles = require("./roles.ts");
 
-
-
 gameRoomArray.set(
   "342000678",
   {
@@ -169,7 +167,6 @@ function handleMessage(sender_psid, received_message) {
     accessGame(sender_psid);
   }else if(received_message.text.toLowerCase() === "@all_room"){
     console.log("ALL ROOM", gameRoomArray);
-    console.log("My ROOM", findRoom(sender_psid));
   }else if(received_message.text.toLowerCase() === "@role_all"){
     response = Command.handelRoleAll();
   }else if(received_message.text.toLowerCase() === "@help"){
@@ -215,38 +212,37 @@ function randomKeyNumber(min, max) {
 }
 
 function generateKey(sender_psid){
-	let roomid;
-	do {
-		roomid = randomKeyNumber(10000,99999);
-	}
-	while (gameRoomArray.has(roomid));
-	//tao phong
-    let room = new Room(
-      null,
-      [],
-      sender_psid.toString(),
-      null,
-      null,
-      [],
-    );
-    console.log(room);
-	//tao admin
-    let tempPlayer = new Player(sender_psid);
-	  tempPlayer.room = roomid;
-    tempPlayer.admin = true;
-    //insert admin to room and add room to gameRoomArray
-    room.players.push(sender_psid);
-    gameRoomArray.set(roomid , room);
+  let reponseMessage;
+  if(findRoom(sender_psid)){
+    let roomid;
+    do {
+      roomid = Math.floor(randomKeyNumber(10000,99999));
+    }
+    while (gameRoomArray.has(roomid));
+    //tao phong
+      let room = new Room(null, [], sender_psid.toString(), null, null, [],);
+      console.log(room);
+    //tao admin
+      let tempPlayer = new Player(sender_psid);
+      tempPlayer.room = roomid;
+      tempPlayer.admin = true;
+      //insert admin to room and add room to gameRoomArray
+      room.players.push(sender_psid);
+      gameRoomArray.set(roomid , room);
+      reponseMessage = { "text": "You have created a game, your room ID is: "+ roomid };
+  }else{
+    reponseMessage = { "text": "You owner a room !" };
+  
+  }
+  callSendAPI(sender_psid, reponseMessage);
 	
-    let startMessage = { "text": "You have created a game, your room ID is: "+ roomid };
-    callSendAPI(sender_psid, startMessage);
 }
 
+//check thằng đó có phải là admin của phòng nào không
 function findRoom(sender){
   let tmp;
   gameRoomArray.forEach((room) =>{
     if(room.adminId == sender.toString()){
-      console.log("MATCH");
       tmp = room;
     }
   })
