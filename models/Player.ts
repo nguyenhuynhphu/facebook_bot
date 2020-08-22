@@ -1,7 +1,14 @@
 module.exports = class Player {
-    id: number; // sender
-    alive: boolean = true;
-    admin: boolean = false;
-    role: string;
-	room: number = 0;
+    id; // sender
+    alive;
+    admin;
+    role;
+    room;
+    constructor(id, alive, admin, role, room){
+        this.id = id;
+        this.alive = alive;
+        this.admin = admin;
+        this.role = role;
+        this.room = room;
+    }
 }
