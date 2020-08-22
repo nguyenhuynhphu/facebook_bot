@@ -206,7 +206,7 @@ function createRoom(sender_psid){
     do {
       roomid = Math.floor(randomKeyNumber(10000,99999));
     }
-    while (gameRoomArray.has(roomid));
+    while (getRoomByRoomID(roomid) != null);
     //tao phong
       let room = new Room(roomid, 1, [], sender_psid.toString(), null, null, [],);
       console.log("NEW ROOM", room);
@@ -229,7 +229,7 @@ function createRoom(sender_psid){
 }
 
 function getRoomByRoomID(roomID) {
-  return gameRoomArray[Object.keys(gameRoomArray).find(key => gameRoomArray[key].roomId === roomID)];
+  return gameRoomArray[[...gameRoomArray.entries()].filter(({ 1: v }) => v === roomID).map(([k]) => k)[0]];
 }
 
 
