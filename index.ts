@@ -196,7 +196,7 @@ function createRoom(sender_psid){
     do {
       roomid = Math.floor(randomKeyNumber(10000,99999));
     }
-    while (gameRoomArray.has(roomid));
+    while (getRoomByRoomID(roomid) == null);
     //tao phong
       let room = new Room(roomid, null, [], sender_psid.toString(), null, null, [],);
       console.log("NEW ROOM", room);
@@ -213,10 +213,41 @@ function createRoom(sender_psid){
       }, 2000);
   }else{
     reponseMessage = { "text": "You owner a room !" };
-  
   }
   callSendAPI(sender_psid, reponseMessage);
 	
+}
+
+function getRoomByRoomID(roomID) {
+  return gameRoomArray[Object.keys(gameRoomArray).find(key => gameRoomArray[key].roomId === roomID)];
+}
+
+
+function joinRoom(sender,text){
+	if (getRoomByRoomID(text) != null){
+		if(getRoomByRoomID(text).players.length < getRoomByRoomID(text).number_player){
+			let newPlayer = new Player(sender);
+			newPlayer.room = text;
+			getRoomByRoomID(text).players.push(newPlayer);
+			let joinMessage = { text: "you have successfully joined the room: "+ text};
+		}
+	}
+	else{
+		let joinMessage = { text: "room ID invalid"};
+	}
+}
+
+function outRoom(sender,text){
+	if (getRoomByRoomID(text) != null){
+		for(var i = 0; i < getRoomByRoomID(text).players.length;i++){
+			if(getRoomByRoomID(text).players.get(i).id == sender){
+				getRoomByRoomID(text).players.splice(i, 1);
+			}
+		}	
+	}
+	else{
+		let joinMessage = { text: "room ID invalid"};
+	}
 }
 
 function showRoomInfo(room){

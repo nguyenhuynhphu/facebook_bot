@@ -46,7 +46,7 @@ function joinRoom(sender,text){
 		if(gameRoomArray.get(text).players.length < 25){
 			let newPlayer = new Player(sender);
 			newPlayer.room = text;
-			gameRoomArray.get(text).player.push(newPlayer);
+			gameRoomArray.get(text).players.push(newPlayer);
 			let joinMessage = { text: "you have successfully joined the room: "+ text};
 		}
 	}
