@@ -196,13 +196,7 @@ function handlePostback(sender_psid, received_postback) {
     callSendAPI(sender_psid, response);
   } else if (payload === '@_Create') {
     // random id phòng -> trả về key
-    generateKey(sender_psid);
-    // kieemr tra state cua phong
-    setTimeout(function () {
-      var room = findRoom(sender_psid);
-      checkRoomState(room, sender_psid);
-    }, 1000);
-    // chọn chức năng có trong phòng
+    createRoom(sender_psid);
   }
 
 }
@@ -211,7 +205,7 @@ function randomKeyNumber(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-function generateKey(sender_psid){
+function createRoom(sender_psid){
   let reponseMessage;
   if(!findRoom(sender_psid)){
     let roomid;
@@ -230,6 +224,11 @@ function generateKey(sender_psid){
       room.players.push(sender_psid);
       gameRoomArray.set(roomid , room);
       reponseMessage = { "text": "You have created a game, your room ID is: "+ roomid };
+
+      setTimeout(function () {
+        var room = findRoom(sender_psid);
+        checkRoomState(room, sender_psid);
+      }, 2000);
   }else{
     reponseMessage = { "text": "You owner a room !" };
   
