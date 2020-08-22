@@ -221,13 +221,21 @@ function generateKey(sender_psid){
 	}
 	while (gameRoomArray.has(roomid));
 	//tao phong
-    let room = new Room();
+    let room = new Room(
+      null,
+      [],
+      sender_psid.toString(),
+      null,
+      null,
+      [],
+    );
+    console.log(room);
 	//tao admin
     let tempPlayer = new Player(sender_psid);
 	  tempPlayer.room = roomid;
     tempPlayer.admin = true;
-	//insert admin to room and add room to gameRoomArray
-	room.players.push(sender_psid);
+    //insert admin to room and add room to gameRoomArray
+    room.players.push(sender_psid);
     gameRoomArray.set(roomid , room);
 	
     let startMessage = { "text": "You have created a game, your room ID is: "+ roomid };
