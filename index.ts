@@ -2,6 +2,7 @@
 
 // Imports dependencies and set up http server
 var Room = require('./models/Room.ts');
+var Player = require('./models/Room.ts');
 const
   PAGE_ACCESS_TOKEN = "EAAJDVVZAcvT0BAAjWSxIooCWPk3M8ZB7t1tTdnxA27wlhoJz3YDr98qA11jfBCWQk8I2p9LvwYDtG6tUisB9rSQr3nshviwb0HLKntcZCv4XoENGscTcgEavKs0er394waPHDOePbIZB5pwZAwzMqZBWGrZAMnxlaEhY0S7LQ2ZBWwZDZD",
   express = require('express'),
@@ -209,28 +210,28 @@ function handlePostback(sender_psid, received_postback) {
 
 }
 
-function randomNumber(min, max) {
+function randomKeyNumber(min, max) {
   return Math.random() * (max - min) + min;
 }
 
 function generateKey(sender_psid){
 	let roomid;
 	do {
-		roomid = randomNumber(10000,99999);
+		roomid = randomKeyNumber(10000,99999);
 	}
 	while (this.gameRoomArray.has(roomid));
 	//tao phong
     let room = new Room();
 	//tao admin
-    let tempPlayer = new Player(sender);
-	tempPlayer.room = roomid;
+    let tempPlayer = new Player(sender_psid);
+	  tempPlayer.room = roomid;
     tempPlayer.admin = true;
 	//insert admin to room and add room to gameRoomArray
-	room.players.push(sender);
+	room.players.push(sender_psid);
     this.gameRoomArray.set(roomid , room);
 	
     let startMessage = { "text": "You have created a game, your room ID is: "+ roomid };
-    callSendAPI(sender, startMessage);
+    callSendAPI(sender_psid, startMessage);
 }
 
 function findRoom(sender){
