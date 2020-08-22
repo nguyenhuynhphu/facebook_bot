@@ -198,19 +198,18 @@ function createRoom(sender_psid){
     }
     while (gameRoomArray.has(roomid));
     //tao phong
-      let room = new Room(null, [], sender_psid.toString(), null, null, [],);
-      console.log(room);
+      let room = new Room(roomid, null, [], sender_psid.toString(), null, null, [],);
+      console.log("NEW ROOM", room);
     //tao admin
       let tempPlayer = new Player(sender_psid);
       tempPlayer.room = roomid;
       tempPlayer.admin = true;
       //insert admin to room and add room to gameRoomArray
-      room.players.push(sender_psid);
-      gameRoomArray.set(roomid , room);
-      reponseMessage = { "text": "You have created a game, your room ID is: "+ roomid };
+      room.players.push(tempPlayer);
+      gameRoomArray.set(sender_psid , room);
+      reponseMessage = { "text": "You have created a game, your room ID is: "+ roomid};
 
       setTimeout(function () {
-        var room = findRoom(sender_psid);
         checkRoomState(room, sender_psid);
       }, 2000);
   }else{
@@ -223,12 +222,7 @@ function createRoom(sender_psid){
 
 //check thằng đó có phải là admin của phòng nào không
 function findRoom(sender){
-  let tmp;
-  gameRoomArray.forEach((room) =>{
-    if(room.adminId == sender.toString()){
-      tmp = room;
-    }
-  })
+  let tmp = gameRoomArray.get(sender);
   return tmp;
 }
 
@@ -257,6 +251,10 @@ function setRoles(sender_psid, received_message){
     console.log("SET ROLES", room);
     checkRoomState(room, sender_psid);
   }
+}
+
+function displayInfoRoom(room){
+
 }
 
 function isValidRole(roles){

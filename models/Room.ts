@@ -1,4 +1,5 @@
 module.exports = class Room {
+    roomId;
     number_player;
     players;
     adminId;
@@ -9,7 +10,8 @@ module.exports = class Room {
     suspects = [];
     usingRole = [];
 
-    constructor(number_player, players, adminId, targets, suspects, usingRole){
+    constructor(roomId, number_player, players, adminId, targets, suspects, usingRole){
+        this.roomId = roomId;
         this.number_player = number_player;
         this.players = players;
         this.adminId = adminId;
