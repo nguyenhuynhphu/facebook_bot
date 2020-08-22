@@ -208,7 +208,7 @@ function createRoom(sender_psid){
     do {
       roomid = Math.floor(randomKeyNumber(10000,99999));
     }
-    while (gameRoomArray.get(getRoomByRoomID(roomid)[0]) != undefined);
+    while (getRoomByRoomID(roomid) != undefined);
     //tao phong
       let room = new Room(roomid, 1, [], sender_psid.toString(), null, null, [],);
       console.log("NEW ROOM", room);
@@ -231,9 +231,16 @@ function createRoom(sender_psid){
 	
 }
 
-function getRoomByRoomID(roomID) {
-  let key = [...gameRoomArray.entries()].filter(({ 1: v }) => v.roomId === roomID).map(([k]) => k);
-  return key;
+// function getRoomByRoomID(roomID) {
+//   let key = [...gameRoomArray.entries()].filter(({ 1: v }) => v.roomId === roomID).map(([k]) => k);
+//   return gameRoomArray.get(key[0]);
+// }
+
+function getRoomByRoomID(searchValue) {
+  for (let [key, value] of gameRoomArray.entries()) {
+    if (value.roomId === searchValue)
+      return value;
+  }
 }
 
 
@@ -241,8 +248,16 @@ function joinRoom(sender,text){
   let reponseMessage;
   var msg = text.toLowerCase();
   msg = msg.slice(2, msg.lastIndexOf("]"));
-  let key = getRoomByRoomID(msg)
-  reponseMessage = {"text":"key: "+key[0]};
+	if (getRoomByRoomID(msg) != undefined){
+		if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
+			let newPlayer = new Player(sender,msg);
+			getRoomByRoomID(msg).players.push(newPlayer);
+			reponseMessage = { "text": "you have successfully joined the room: "+ text};
+		}
+	}
+	else{
+		reponseMessage = { "text": "room ID: "+msg+" invalid " + "room: "+getRoomByRoomID(msg).roomId};
+  }
   callSendAPI(sender, reponseMessage);
 }
 
