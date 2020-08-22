@@ -219,7 +219,7 @@ function generateKey(sender_psid){
 	do {
 		roomid = randomKeyNumber(10000,99999);
 	}
-	while (this.gameRoomArray.has(roomid));
+	while (gameRoomArray.has(roomid));
 	//tao phong
     let room = new Room();
 	//tao admin
@@ -228,7 +228,7 @@ function generateKey(sender_psid){
     tempPlayer.admin = true;
 	//insert admin to room and add room to gameRoomArray
 	room.players.push(sender_psid);
-    this.gameRoomArray.set(roomid , room);
+    gameRoomArray.set(roomid , room);
 	
     let startMessage = { "text": "You have created a game, your room ID is: "+ roomid };
     callSendAPI(sender_psid, startMessage);
