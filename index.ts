@@ -28,11 +28,13 @@ gameRoomArray.set(
 gameRoomArray.set(
   "123456789",
   {
-    number_player: 25,
-    players: [],
-    adminId: "1232132132",
-    targets: [],
-    suspects: [],
+    number_player: null,
+    players: [
+      {name: "asdasd"}
+    ],
+    adminId: "3449685015091453",
+    targets: null,
+    suspects: null,
     usingRole: [],
   }
 );
