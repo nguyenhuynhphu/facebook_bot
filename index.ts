@@ -209,6 +209,10 @@ function handlePostback(sender_psid, received_postback) {
 
 }
 
+function randomNumber(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
 function generateKey(sender_psid){
 	let roomid;
 	do {
