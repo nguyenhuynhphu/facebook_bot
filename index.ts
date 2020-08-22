@@ -217,6 +217,7 @@ function createRoom(sender_psid){
       console.log("Admin", tempPlayer);
       //insert admin to room and add room to gameRoomArray
       room.players.push(tempPlayer);
+      room.number_player = 10;
       gameRoomArray.set(sender_psid , room);
       reponseMessage = { "text": "You have created a game, your room ID is: "+ roomid};
 
