@@ -171,6 +171,8 @@ function handleMessage(sender_psid, received_message) {
     setNumberPlayer(sender_psid, received_message.text);
   }else if(received_message.text.toLowerCase().includes("r[") && received_message.text.toLowerCase().includes("]") ){
     setRoles(sender_psid, received_message.text);
+  }else if(received_message.text.toLowerCase().includes("j[") && received_message.text.toLowerCase().includes("]") ){
+    joinRoom(sender_psid, received_message.text);
   }else{
 
   }
@@ -206,7 +208,7 @@ function createRoom(sender_psid){
     do {
       roomid = Math.floor(randomKeyNumber(10000,99999));
     }
-    while (getRoomByRoomID(roomid) != null);
+    while (getRoomByRoomID(roomid) != undefined);
     //tao phong
       let room = new Room(roomid, 1, [], sender_psid.toString(), null, null, [],);
       console.log("NEW ROOM", room);
@@ -234,11 +236,13 @@ function getRoomByRoomID(roomID) {
 
 
 function joinRoom(sender,text){
-	if (getRoomByRoomID(text) != null){
-		if(getRoomByRoomID(text).players.length < getRoomByRoomID(text).number_player){
+  var msg = text.toLowerCase();
+  msg = msg.slice(2, msg.lastIndexOf("]"));
+	if (getRoomByRoomID(msg) != undefined){
+		if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
 			let newPlayer = new Player(sender);
-			newPlayer.room = text;
-			getRoomByRoomID(text).players.push(newPlayer);
+			newPlayer.room = msg;
+			getRoomByRoomID(msg).players.push(newPlayer);
 			let joinMessage = { text: "you have successfully joined the room: "+ text};
 		}
 	}
@@ -248,10 +252,12 @@ function joinRoom(sender,text){
 }
 
 function outRoom(sender,text){
-	if (getRoomByRoomID(text) != null){
-		for(var i = 0; i < getRoomByRoomID(text).players.length;i++){
-			if(getRoomByRoomID(text).players.get(i).id == sender){
-				getRoomByRoomID(text).players.splice(i, 1);
+  var msg = text.toLowerCase();
+  msg = msg.slice(2, msg.lastIndexOf("]"));
+	if (getRoomByRoomID(msg) != undefined){
+		for(var i = 0; i < getRoomByRoomID(msg).players.length;i++){
+			if(getRoomByRoomID(msg).players.get(i).id == sender){
+				getRoomByRoomID(msg).players.splice(i, 1);
 			}
 		}	
 	}
