@@ -241,16 +241,16 @@ function joinRoom(sender,text){
   var msg = text.toLowerCase();
   msg = msg.slice(2, msg.lastIndexOf("]"));
   reponseMessage = { "text": "room ID: "+msg};
-	if (getRoomByRoomID(msg) != undefined){
+	if (getRoomByRoomID(msg) != null){
 		if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
 			let newPlayer = new Player(sender,msg);
 			getRoomByRoomID(msg).players.push(newPlayer);
 			reponseMessage = { "text": "you have successfully joined the room: "+ text};
 		}
 	}
-	//else{
-	//	reponseMessage = { "text": "room ID invalid"};
-  //}
+	else{
+		reponseMessage = { "text": "room ID invalid"};
+  }
   callSendAPI(sender, reponseMessage);
 }
 
