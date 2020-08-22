@@ -276,21 +276,11 @@ function isValidRole(roles){
   //cần update để có thể handel tất cả các sói
   let vaild = false;
   roles.forEach(role => {
-    if(role == "Sói thường".toLowerCase()){
+    if(role == "6".toLowerCase()){
         vaild = true;
     }
   });
   return vaild;
-}
-
-function checkRoleDuplicate(roles){
-  let vaild = false;
-  roles.forEach(role => {
-    if(role == "Sói thường".toLowerCase()){
-        vaild = true;
-    }
-  });
-  return vaild; 
 }
 
 function checkRoomState(room, sender_psid){
@@ -314,9 +304,11 @@ function checkRoomState(room, sender_psid){
     response = { 
       "text": `
         Chưa chọn vai trò, nói cho mình biết trò chơi của bạn sẽ có chức năng gì đặc biệt ?
-  Cú pháp: R[Thợ săn, Phù Thủy, Dân Làng, Sói thường]
+  Cú pháp: R[x, x, x...]
+  vói x là id của chức năng
+  Ví dụ: R[1, 2, 3]
   Mình sẽ nhập số lượng sau nhé !
-  Nếu bạn không nhớ chức năng, gửi @role_all để mình giúp bạn !
+  Nếu bạn không nhớ id của chức năng, gửi @role_all để mình giúp bạn !
       ` 
     }
     callSendAPI(sender_psid, response);
