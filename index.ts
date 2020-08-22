@@ -248,16 +248,18 @@ function joinRoom(sender,text){
   let reponseMessage;
   var msg = text.toLowerCase();
   msg = msg.slice(2, msg.lastIndexOf("]"));
-	if (getRoomByRoomID(msg) != undefined){
-		if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
-			let newPlayer = new Player(sender,msg);
-			getRoomByRoomID(msg).players.push(newPlayer);
-			reponseMessage = { "text": "you have successfully joined the room: "+ text};
-		}
-	}
-	else{
-		reponseMessage = { "text": "room ID: "+msg+" invalid " + "room: "+getRoomByRoomID(msg).roomId};
-  }
+  let room = getRoomByRoomID(msg);
+  reponseMessage = { "text": "you have successfully joined the room: "+ room.roomId};
+	// if (getRoomByRoomID(msg) != undefined){
+	// 	if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
+	// 		let newPlayer = new Player(sender,msg);
+	// 		getRoomByRoomID(msg).players.push(newPlayer);
+	// 		reponseMessage = { "text": "you have successfully joined the room: "+ text};
+	// 	}
+	// }
+	// else{
+	// 	reponseMessage = { "text": "room ID: "+msg+" invalid "};
+  // }
   callSendAPI(sender, reponseMessage);
 }
 
