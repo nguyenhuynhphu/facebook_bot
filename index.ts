@@ -241,7 +241,8 @@ function joinRoom(sender,text){
   let reponseMessage;
   var msg = text.toLowerCase();
   msg = msg.slice(2, msg.lastIndexOf("]"));
-  reponseMessage = {"text":"key: "+getRoomByRoomID(msg)};
+  let key = getRoomByRoomID(msg)
+  reponseMessage = {"text":"key: "+key[0]};
   callSendAPI(sender, reponseMessage);
 }
 
