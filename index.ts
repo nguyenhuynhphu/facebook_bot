@@ -208,7 +208,7 @@ function createRoom(sender_psid){
     do {
       roomid = Math.floor(randomKeyNumber(10000,99999));
     }
-    while (getRoomByRoomID(roomid) != undefined);
+    while (gameRoomArray.get(getRoomByRoomID(roomid)[0]) != undefined);
     //tao phong
       let room = new Room(roomid, 1, [], sender_psid.toString(), null, null, [],);
       console.log("NEW ROOM", room);
