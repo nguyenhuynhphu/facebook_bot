@@ -10,6 +10,8 @@ const
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
 const gameRoomArray = new Map();
+
+let systemRoles = require("./roles.ts");
 gameRoomArray.set(
   "342000678",
   {
@@ -20,8 +22,7 @@ gameRoomArray.set(
     adminId: "2988442917949850",
     targets: null,
     suspects: null,
-    usingRole: null,
-    roomState: ""
+    usingRole: [],
   }
 );
 gameRoomArray.set(
@@ -33,7 +34,6 @@ gameRoomArray.set(
     targets: [],
     suspects: [],
     usingRole: [],
-    roomState: ""
   }
 );
 
@@ -198,8 +198,10 @@ function handlePostback(sender_psid, received_postback) {
     response = { "text": "Your create a game, this is your key **************" }
     callSendAPI(sender_psid, response);
     // kieemr tra state cua phong
-    var room = findRoom(sender_psid);
-    checkRoomState(room, sender_psid);
+    setTimeout(function () {
+      var room = findRoom(sender_psid);
+      checkRoomState(room, sender_psid);
+    }, 1000);
     // chọn chức năng có trong phòng
   }
 
@@ -247,6 +249,17 @@ function setRoles(sender_psid, received_message){
   }
 }
 
+function isValidRole(roles){
+  // hàm này đang set cứng  cho sói thường, 
+  //cần update để có thể handel tất cả các sói
+  let vaild = true;
+  roles.forEach(role => {
+    if(role == "Sói thường".toLowerCase()){
+        vaild = false;
+    }
+  });
+  return vaild;
+}
 
 function checkRoomState(room, sender_psid){
   let response;
@@ -264,11 +277,18 @@ function checkRoomState(room, sender_psid){
   //     return "NOT_ENOUGN_PLAYER";
   //   }
   // }
-  if(room.usingRole == null){
+  if(!isValidRole(room.usingRole)){
+    response = { 
+      "text": `Các vai trò bạn chọn chưa có sói, bạn chọn lại giúp mình nhé` 
+    }
+    callSendAPI(sender_psid, response);
+    return "NOT_CHOICE_ROLE_YET";
+  }
+  if(room.usingRole.length == 0){
     response = { 
       "text": `
         Chưa chọn vai trò, nói cho mình biết trò chơi của bạn sẽ có chức năng gì đặc biệt ?
-  Cú pháp: R[Thợ săn, Phù Thủy, Dân Làng, Sói]
+  Cú pháp: R[Thợ săn, Phù Thủy, Dân Làng, Sói thường]
   Mình sẽ nhập số lượng sau nhé !
   Nếu bạn không nhớ chức năng, gửi @role_all để mình giúp bạn !
       ` 
@@ -276,7 +296,7 @@ function checkRoomState(room, sender_psid){
     callSendAPI(sender_psid, response);
     return "NOT_CHOICE_ROLE_YET";
   }else{
-    if(room.usingRole.length < room.number_player){
+    if(room.usingRole.length < room.number_player){ 
       return "NOT_ENOUGH_ROLE_FOR_PLAYER";
     }
   }
