@@ -239,7 +239,8 @@ function setRoles(sender_psid, received_message){
     var msg = received_message.toLowerCase();
     msg = msg = msg.slice(2, msg.lastIndexOf("]"));
     let usingRole = msg.split(",");
-    usingRole.forEach(element => {
+    let unique = usingRole.filter((item, i, ar) => ar.indexOf(item) === i);
+    unique.forEach(element => {
       if(room.usingRole == null)
         room.usingRole = new Array();
       room.usingRole.push(element.trim());
@@ -252,13 +253,23 @@ function setRoles(sender_psid, received_message){
 function isValidRole(roles){
   // hàm này đang set cứng  cho sói thường, 
   //cần update để có thể handel tất cả các sói
-  let vaild = true;
+  let vaild = false;
   roles.forEach(role => {
     if(role == "Sói thường".toLowerCase()){
-        vaild = false;
+        vaild = true;
     }
   });
   return vaild;
+}
+
+function checkRoleDuplicate(roles){
+  let vaild = false;
+  roles.forEach(role => {
+    if(role == "Sói thường".toLowerCase()){
+        vaild = true;
+    }
+  });
+  return vaild; 
 }
 
 function checkRoomState(room, sender_psid){
@@ -277,13 +288,7 @@ function checkRoomState(room, sender_psid){
   //     return "NOT_ENOUGN_PLAYER";
   //   }
   // }
-  if(!isValidRole(room.usingRole)){
-    response = { 
-      "text": `Các vai trò bạn chọn chưa có sói, bạn chọn lại giúp mình nhé` 
-    }
-    callSendAPI(sender_psid, response);
-    return "NOT_CHOICE_ROLE_YET";
-  }
+  
   if(room.usingRole.length == 0){
     response = { 
       "text": `
@@ -300,6 +305,15 @@ function checkRoomState(room, sender_psid){
       return "NOT_ENOUGH_ROLE_FOR_PLAYER";
     }
   }
+
+  if(!isValidRole(room.usingRole)){
+    response = { 
+      "text": `Các vai trò bạn chọn chưa có sói, bạn chọn lại giúp mình nhé` 
+    }
+    callSendAPI(sender_psid, response);
+    return "NOT_CHOICE_ROLE_YET";
+  }
+
   return "READY_TO_START";
 }
 
