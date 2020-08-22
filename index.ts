@@ -220,7 +220,7 @@ function createRoom(sender_psid){
 }
 
 function showRoomInfo(room){
-  let listPlayer = room.number_player;
+  let listPlayer = room.players;
   let strPlayer = "";
   listPlayer.forEach(element => {
     strPlayer += showPlayerInfo(element) + "\n";
