@@ -202,6 +202,7 @@ function createRoom(sender_psid){
       console.log("NEW ROOM", room);
     //tao admin
       let tempPlayer = new Player(sender_psid, true, true, "", roomid);
+      console.log("Admin", tempPlayer);
       //insert admin to room and add room to gameRoomArray
       room.players.push(tempPlayer);
       gameRoomArray.set(sender_psid , room);
