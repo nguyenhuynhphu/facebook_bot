@@ -132,6 +132,8 @@ function callSendAPI(sender_psid, response) {
 
 }
 
+
+//4287205711351255
 function handleMessage(sender_psid, received_message) {
   let response;
   // Check if the message contains text
@@ -151,8 +153,16 @@ function handleMessage(sender_psid, received_message) {
     response = {
       "text": findRoom(sender_psid) ? showRoomInfo(findRoom(sender_psid)) : "You don't have room !"
     };
+  }else if(received_message.text.toLowerCase() === "@delete_room"){
+    gameRoomArray.delete(sender_psid);
+    response = {
+      "text": "You room have remove !"
+    };
   }else if(received_message.text.toLowerCase() === "@role_all"){
     response = Command.handelRoleAll();
+  }else if(received_message.text.toLowerCase() === "@test_msg"){
+    sender_psid = 4287205711351255;
+    response = {"text": "Oh yeah bạn !"};
   }else if(received_message.text.toLowerCase() === "@help"){
     response = Command.handelHelp();
   }else if(received_message.text.toLowerCase() === "@newgame"){
@@ -198,7 +208,7 @@ function createRoom(sender_psid){
     }
     while (gameRoomArray.has(roomid));
     //tao phong
-      let room = new Room(roomid, null, [], sender_psid.toString(), null, null, [],);
+      let room = new Room(roomid, 1, [], sender_psid.toString(), null, null, [],);
       console.log("NEW ROOM", room);
     //tao admin
       let tempPlayer = new Player(sender_psid, true, true, "", roomid);
@@ -227,8 +237,8 @@ function showRoomInfo(room){
   });
   let tmp = `
     RoomID = ${room.roomId}
-    AdminId = ${room.adminId}
-    Number Player = ${room.number_player}
+  AdminId = ${room.adminId}
+  Number Player = ${room.number_player}
     Players in Room:
     ${strPlayer}
   `
@@ -236,7 +246,7 @@ function showRoomInfo(room){
 }
 
 function showPlayerInfo(player){
-  return `${player.id}_${player.alive}_${player.admin}_${player.role}`;
+  return `${player.id}`;
 }
 
 //check thằng đó có phải là admin của phòng nào không
