@@ -238,8 +238,12 @@ function setRoles(sender_psid, received_message){
   room.usingRole = [];
   if(room != undefined){
     var msg = received_message.toLowerCase();
-    msg = msg = msg.slice(2, msg.lastIndexOf("]"));
-    room.usingRole = msg.split(",").filter((item, i, ar) => ar.indexOf(item) === i);
+    msg = msg.slice(2, msg.lastIndexOf("]"));
+    let tmp = [];
+    msg.split(",").forEach(element => {
+      tmp.push(element.trim());
+    });
+    room.usingRole = tmp.filter((item, i, ar) => ar.indexOf(item) === i);
     console.log("SET ROLES", room);
     checkRoomState(room, sender_psid);
   }
@@ -296,9 +300,9 @@ function checkRoomState(room, sender_psid){
     callSendAPI(sender_psid, response);
     return "NOT_CHOICE_ROLE_YET";
   }else{
-    if(room.usingRole.length < room.number_player){ 
-      return "NOT_ENOUGH_ROLE_FOR_PLAYER";
-    }
+    // if(room.usingRole.length < room.number_player){ 
+    //   return "NOT_ENOUGH_ROLE_FOR_PLAYER";
+    // }
   }
 
   if(!isValidRole(room.usingRole)){
