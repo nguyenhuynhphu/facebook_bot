@@ -235,14 +235,12 @@ function setNumberPlayer(sender_psid, received_message){
 
 function setRoles(sender_psid, received_message){
   var room = findRoom(sender_psid.toString());
+  room.usingRole = [];
   if(room != undefined){
     var msg = received_message.toLowerCase();
     msg = msg = msg.slice(2, msg.lastIndexOf("]"));
-    let usingRole = msg.split(",");
-    let unique = usingRole.filter((item, i, ar) => ar.indexOf(item) === i);
+    let unique = msg.split(",").filter((item, i, ar) => ar.indexOf(item) === i);
     unique.forEach(element => {
-      if(room.usingRole == null)
-        room.usingRole = new Array();
       room.usingRole.push(element.trim());
     });
     console.log("SET ROLES", room);
