@@ -149,7 +149,7 @@ function handleMessage(sender_psid, received_message) {
     };
   }else if(received_message.text.toLowerCase() === "@my_room"){
     response = {
-      "text": findRoom(sender_psid) ? findRoom(sender_psid).toString() : "You don't have room !"
+      "text": findRoom(sender_psid) ? showRoomInfo(findRoom(sender_psid)) : "You don't have room !"
     };
   }else if(received_message.text.toLowerCase() === "@role_all"){
     response = Command.handelRoleAll();
@@ -217,6 +217,26 @@ function createRoom(sender_psid){
   }
   callSendAPI(sender_psid, reponseMessage);
 	
+}
+
+function showRoomInfo(room){
+  let listPlayer = room.number_player;
+  let strPlayer = "";
+  listPlayer.forEach(element => {
+    strPlayer += showPlayerInfo(element) + "\n";
+  });
+  let tmp = `
+    RoomID = ${room.roomId} \n
+    AdminId = ${room.adminId} \n
+    Number Player = ${room.number_player} \n
+    Players: \n
+    ${listPlayer}
+  `
+  return tmp;
+}
+
+function showPlayerInfo(player){
+  return `${player.id}_${player.alive}_${player.admin}_${player.role}`;
 }
 
 //check thằng đó có phải là admin của phòng nào không
