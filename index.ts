@@ -239,10 +239,7 @@ function setRoles(sender_psid, received_message){
   if(room != undefined){
     var msg = received_message.toLowerCase();
     msg = msg = msg.slice(2, msg.lastIndexOf("]"));
-    let unique = msg.split(",").filter((item, i, ar) => ar.indexOf(item) === i);
-    unique.forEach(element => {
-      room.usingRole.push(element.trim());
-    });
+    room.usingRole = msg.split(",").filter((item, i, ar) => ar.indexOf(item) === i);
     console.log("SET ROLES", room);
     checkRoomState(room, sender_psid);
   }
