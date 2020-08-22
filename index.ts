@@ -232,7 +232,7 @@ function createRoom(sender_psid){
 }
 
 function getRoomByRoomID(roomID) {
-  let key = [...gameRoomArray.entries()].filter(({ 1: v }) => v === roomID).map(([k]) => k)
+  let key = [...gameRoomArray.entries()].filter(({ 1: v }) => v.roomId === roomID).map(([k]) => k);
   return gameRoomArray.get(key[0]);
 }
 
