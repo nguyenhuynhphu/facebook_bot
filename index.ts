@@ -240,7 +240,6 @@ function joinRoom(sender,text){
   let reponseMessage;
   var msg = text.toLowerCase();
   msg = msg.slice(2, msg.lastIndexOf("]"));
-  reponseMessage = { "text": "room ID: "+msg};
 	if (getRoomByRoomID(msg) != undefined){
 		if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
 			let newPlayer = new Player(sender,msg);
@@ -249,7 +248,7 @@ function joinRoom(sender,text){
 		}
 	}
 	else{
-		reponseMessage = { "text": "room ID invalid"};
+		reponseMessage = { "text": "room ID: "+msg+" invalid"};
   }
   callSendAPI(sender, reponseMessage);
 }
