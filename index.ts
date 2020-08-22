@@ -2,7 +2,7 @@
 
 // Imports dependencies and set up http server
 var Room = require('./models/Room.ts');
-var Player = require('./models/Room.ts');
+var Player = require('./models/Player.ts');
 const
   PAGE_ACCESS_TOKEN = "EAAJDVVZAcvT0BAAjWSxIooCWPk3M8ZB7t1tTdnxA27wlhoJz3YDr98qA11jfBCWQk8I2p9LvwYDtG6tUisB9rSQr3nshviwb0HLKntcZCv4XoENGscTcgEavKs0er394waPHDOePbIZB5pwZAwzMqZBWGrZAMnxlaEhY0S7LQ2ZBWwZDZD",
   express = require('express'),
