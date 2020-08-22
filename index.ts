@@ -230,7 +230,7 @@ function showRoomInfo(room){
     AdminId = ${room.adminId}
     Number Player = ${room.number_player}
     Players in Room:
-    ${listPlayer}
+    ${strPlayer}
   `
   return tmp;
 }
