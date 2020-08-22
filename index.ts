@@ -240,8 +240,7 @@ function joinRoom(sender,text){
   msg = msg.slice(2, msg.lastIndexOf("]"));
 	if (getRoomByRoomID(msg) != undefined){
 		if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
-			let newPlayer = new Player(sender);
-			newPlayer.room = msg;
+			let newPlayer = new Player(sender,msg);
 			getRoomByRoomID(msg).players.push(newPlayer);
 			let joinMessage = { text: "you have successfully joined the room: "+ text};
 		}
