@@ -241,7 +241,7 @@ function joinRoom(sender,text){
   var msg = text.toLowerCase();
   msg = msg.slice(2, msg.lastIndexOf("]"));
   reponseMessage = { "text": "room ID: "+msg};
-	if (getRoomByRoomID(msg) != null){
+	if (getRoomByRoomID(msg) != undefined){
 		if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
 			let newPlayer = new Player(sender,msg);
 			getRoomByRoomID(msg).players.push(newPlayer);
