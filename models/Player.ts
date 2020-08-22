@@ -4,10 +4,11 @@ module.exports = class Player {
     admin;
     role;
     room;
-    constructor(id, room){
+    constructor(id,alive,admin,role,room){
         this.id = id;
-        this.alive = true;
-        this.admin = false;
+        this.alive = alive;
+        this.admin = admin;
+        this.role = role;
         this.room = room;
     }
 }

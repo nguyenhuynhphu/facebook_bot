@@ -210,15 +210,14 @@ function createRoom(sender_psid){
     }
     while (getRoomByRoomID(roomid) != undefined);
     //tao phong
-      let room = new Room(roomid, 1, [], sender_psid.toString(), null, null, [],);
+      let room = new Room(roomid, 10, [], sender_psid.toString(), null, null, []);
       console.log("NEW ROOM", room);
     //tao admin
       let tempPlayer = new Player(sender_psid, true, true, "", roomid);
       console.log("Admin", tempPlayer);
       //insert admin to room and add room to gameRoomArray
       room.players.push(tempPlayer);
-      room.number_player = 10;
-      gameRoomArray.set(sender_psid , room);
+      gameRoomArray.set(sender_psid, room);
       reponseMessage = { "text": "You have created a game, your room ID is: "+ roomid};
 
       setTimeout(function () {
@@ -239,7 +238,7 @@ function createRoom(sender_psid){
 function getRoomByRoomID(searchValue) {
   for (let [key, value] of gameRoomArray.entries()) {
     if (value.roomId === searchValue)
-      return value;
+      return gameRoomArray.get(key);
   }
 }
 
@@ -249,10 +248,10 @@ function joinRoom(sender,text){
   var msg = text.toLowerCase();
   msg = msg.slice(2, msg.lastIndexOf("]"));
   let room = getRoomByRoomID(msg);
-  reponseMessage = { "text": "you have successfully joined the room: "+ room.roomId};
+  console.log("Admin", room.roomId);
 	if (getRoomByRoomID(msg) != undefined){
 		if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
-			let newPlayer = new Player(sender,msg);
+			let newPlayer = new Player(sender,true,false,"",msg);
 			getRoomByRoomID(msg).players.push(newPlayer);
 			reponseMessage = { "text": "you have successfully joined the room: "+ text};
 		}
