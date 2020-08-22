@@ -13,33 +13,6 @@ const
 const gameRoomArray = new Map();
 let systemRoles = require("./roles.ts");
 
-gameRoomArray.set(
-  "342000678",
-  {
-    number_player: null,
-    players: [
-      {name: "asdasd"}
-    ],
-    adminId: "2988442917949850",
-    targets: null,
-    suspects: null,
-    usingRole: [],
-  }
-);
-gameRoomArray.set(
-  "123456789",
-  {
-    number_player: null,
-    players: [
-      {name: "asdasd"}
-    ],
-    adminId: "3449685015091453",
-    targets: null,
-    suspects: null,
-    usingRole: [],
-  }
-);
-
 // Adds support for GET requests to our webhook
 app.get('/', (req, res) => {
     // Your verify token. Should be a random string.
@@ -167,6 +140,17 @@ function handleMessage(sender_psid, received_message) {
     accessGame(sender_psid);
   }else if(received_message.text.toLowerCase() === "@all_room"){
     console.log("ALL ROOM", gameRoomArray);
+    let tmp = "";
+    gameRoomArray.forEach(element => {
+      tmp += element.toString() + "\n";      
+    });
+    response = {
+      "text": tmp
+    };
+  }else if(received_message.text.toLowerCase() === "@my_room"){
+    response = {
+      "text": findRoom(sender_psid) ? findRoom(sender_psid).toString() : "You don't have room !"
+    };
   }else if(received_message.text.toLowerCase() === "@role_all"){
     response = Command.handelRoleAll();
   }else if(received_message.text.toLowerCase() === "@help"){
