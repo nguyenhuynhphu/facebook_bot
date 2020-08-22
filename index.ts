@@ -213,7 +213,7 @@ function randomKeyNumber(min, max) {
 
 function generateKey(sender_psid){
   let reponseMessage;
-  if(findRoom(sender_psid)){
+  if(!findRoom(sender_psid)){
     let roomid;
     do {
       roomid = Math.floor(randomKeyNumber(10000,99999));
