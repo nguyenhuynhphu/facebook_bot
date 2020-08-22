@@ -226,10 +226,10 @@ function showRoomInfo(room){
     strPlayer += showPlayerInfo(element) + "\n";
   });
   let tmp = `
-    RoomID = ${room.roomId} \n
-    AdminId = ${room.adminId} \n
-    Number Player = ${room.number_player} \n
-    Players: \n
+    RoomID = ${room.roomId}
+    AdminId = ${room.adminId}
+    Number Player = ${room.number_player}
+    Players in Room:
     ${listPlayer}
   `
   return tmp;
