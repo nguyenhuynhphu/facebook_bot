@@ -10,8 +10,10 @@ const
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
 const gameRoomArray = new Map();
-
 let systemRoles = require("./roles.ts");
+
+
+
 gameRoomArray.set(
   "342000678",
   {
@@ -196,9 +198,7 @@ function handlePostback(sender_psid, received_postback) {
     callSendAPI(sender_psid, response);
   } else if (payload === '@_Create') {
     // random id phòng -> trả về key
-    generateKey();
-    response = { "text": "Your create a game, this is your key **************" }
-    callSendAPI(sender_psid, response);
+    generateKey(sender_psid);
     // kieemr tra state cua phong
     setTimeout(function () {
       var room = findRoom(sender_psid);
@@ -209,8 +209,24 @@ function handlePostback(sender_psid, received_postback) {
 
 }
 
-function generateKey(){
-
+function generateKey(sender_psid){
+	let roomid;
+	do {
+		roomid = randomNumber(10000,99999);
+	}
+	while (this.gameRoomArray.has(roomid));
+	//tao phong
+    let room = new Room();
+	//tao admin
+    let tempPlayer = new Player(sender);
+	tempPlayer.room = roomid;
+    tempPlayer.admin = true;
+	//insert admin to room and add room to gameRoomArray
+	room.players.push(sender);
+    this.gameRoomArray.set(roomid , room);
+	
+    let startMessage = { "text": "You have created a game, your room ID is: "+ roomid };
+    callSendAPI(sender, startMessage);
 }
 
 function findRoom(sender){
