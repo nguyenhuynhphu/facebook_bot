@@ -27,6 +27,7 @@ module.exports = class PlayerHandel {
     }
 
     static addPlayer(player){
+        console.log(player);
        if(!this.checkPlayerExits(player.id)){
             this.playersInSystem.push(player);
        }else{
