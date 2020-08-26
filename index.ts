@@ -7,10 +7,12 @@ const
   PAGE_ACCESS_TOKEN = "EAAJDVVZAcvT0BAAjWSxIooCWPk3M8ZB7t1tTdnxA27wlhoJz3YDr98qA11jfBCWQk8I2p9LvwYDtG6tUisB9rSQr3nshviwb0HLKntcZCv4XoENGscTcgEavKs0er394waPHDOePbIZB5pwZAwzMqZBWGrZAMnxlaEhY0S7LQ2ZBWwZDZD",
   express = require('express'),
   Command = require('./command.ts'),
+  PlayerHandel = require('./playersHandel.ts'),
   request = require('request'),
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
 const gameRoomArray = new Map();
+
 let systemRoles = require("./roles.ts");
 
 // Adds support for GET requests to our webhook
@@ -61,7 +63,11 @@ app.post('/', (req, res) => {
 
 });
 
+
+
 function accessGame(sender_psid){
+  let tmp = new Player(sender_psid, true, false, null, null);
+  PlayerHandel.addPlayer(tmp);
   // Construct the message body
   const request_body = {
     "recipient": {
@@ -156,7 +162,7 @@ function handleMessage(sender_psid, received_message) {
   }else if(received_message.text.toLowerCase() === "@delete_room"){
     gameRoomArray.delete(sender_psid);
     response = {
-      "text": "You room have remove !"
+      "text": "Your room have remove !"
     };
   }else if(received_message.text.toLowerCase() === "@role_all"){
     response = Command.handelRoleAll();
@@ -167,6 +173,8 @@ function handleMessage(sender_psid, received_message) {
     response = Command.handelHelp();
   }else if(received_message.text.toLowerCase() === "@newgame"){
     response = Command.handelHelp();
+  }else if(received_message.text.toLowerCase() === "@out_room"){
+    outRoom(sender_psid, received_message.text);
   }else if(received_message.text.toLowerCase().includes("l[") && received_message.text.toLowerCase().includes("]") ){
     setNumberPlayer(sender_psid, received_message.text);
   }else if(received_message.text.toLowerCase().includes("r[") && received_message.text.toLowerCase().includes("]") ){
@@ -230,7 +238,7 @@ function createRoom(sender_psid){
 	
 }
 
-// function getRoomByRoomID(roomID) {
+// function getRoomByRoomUserID(roomID) {
 //   let key = [...gameRoomArray.entries()].filter(({ 1: v }) => v.roomId === roomID).map(([k]) => k);
 //   return gameRoomArray.get(key[0]);
 // }
@@ -239,8 +247,6 @@ function getRoomByRoomID(searchValue) {
   let tmp;
   gameRoomArray.forEach(element => {
     if (element.roomId.toString() == searchValue){
-      console.log(typeof(element.roomId));
-      console.log(typeof(searchValue));
       tmp = element;
     }
   });
@@ -254,8 +260,6 @@ function joinRoom(sender,text){
   var msg = text.toLowerCase();
   msg = msg.slice(2, msg.lastIndexOf("]"));
 
-  let room = getRoomByRoomID(msg); 
-  
 	if (getRoomByRoomID(msg) != undefined){
 		if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
 			let newPlayer = new Player(sender,true,false,"",msg);
@@ -269,7 +273,7 @@ function joinRoom(sender,text){
   callSendAPI(sender, reponseMessage);
 }
 
-function outRoom(sender,text){
+function outRoom(sender, text){
   var msg = text.toLowerCase();
   msg = msg.slice(2, msg.lastIndexOf("]"));
 	if (getRoomByRoomID(msg) != undefined){
@@ -335,10 +339,6 @@ function setRoles(sender_psid, received_message){
     console.log("SET ROLES", room);
     checkRoomState(room, sender_psid);
   }
-}
-
-function displayInfoRoom(room){
-
 }
 
 function isValidRole(roles){
