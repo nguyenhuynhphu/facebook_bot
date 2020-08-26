@@ -45,16 +45,20 @@ app.post('/', (req, res) => {
     if (body.object === 'page') {
       body.entry.forEach(function(entry) {
         const webhook_event = entry.messaging[0];
-        console.log(webhook_event);
         const sender_psid = webhook_event.sender.id;
-        console.log('Sender PSID: ' + sender_psid);
-
-        if (webhook_event.message) {
-          handleMessage(sender_psid, webhook_event.message);
-        } else if (webhook_event.postback) {
-          handlePostback(sender_psid, webhook_event.postback);
+        let currentPlayer = PlayersHandel.checkPlayerExits(sender_psid);
+        if(currentPlayer != undefined){
+          if (webhook_event.message) {
+            handleMessage(sender_psid, webhook_event.message);
+          } else if (webhook_event.postback) {
+            handlePostback(sender_psid, webhook_event.postback);
+          }
+        }else{
+          var response = {
+            "text": "Please send @start to connect with server before do anything !"
+          };
+          callSendAPI(sender_psid, response);
         }
-
       });
       res.status(200).send('EVENT_RECEIVED');
     } else {
