@@ -32,37 +32,23 @@ module.exports = class RoomsHandel {
           }
         });
         return tmp;
-      }
+    }
 
-    // static showAllPlayer(){
-    //     let tmp = "";
-    //     this.playersInSystem.forEach(element => {
-    //         tmp += this.showPlayerInfo(element) + "\n";
-    //     });
-    //     return tmp;
-    // }
-    
-    // static showPlayerInfo(player){
-    //     return `${player.id}`;
-    // }
-
-    
-    // static setPlayerRoom(sender, roomId){
-    //     var tmpPlayer = this.checkPlayerExits(sender);
-    //     if(tmpPlayer != undefined){
-    //         tmpPlayer.room = roomId;
-    //         return "SUCC";
-    //     }
-    //     return "FAIL";
-    // }
-
-    // static setPlayerAdmin(sender){
-    //     var tmpPlayer = this.checkPlayerExits(sender);
-    //     if(tmpPlayer != undefined){
-    //         tmpPlayer.admin = true;
-    //         return "SUCC";
-    //     }
-    //     return "FAIL";
-    // }
+    static showRoomInfo(room){
+        console.log(room);
+        let tmp = `
+          RoomID = ${room.roomId}
+        AdminId = ${room.adminId}
+        Number Player = ${room.number_player}
+          Players in Room:
+          ${room.players}
+        `
+        return tmp;
+    }
+    static showAllRoomInfo(){
+        this.gameRoomArray.forEach(element => {
+            console.log(element)
+        });
+    }
 
 }

@@ -148,9 +148,7 @@ function handleMessage(sender_psid, received_message) {
     accessGame(sender_psid);
   }else if(received_message.text.toLowerCase() === "@all_room"){
     let tmp = "";
-    // gameRoomArray.forEach(element => {
-    //   tmp += element.toString() + "\n";      
-    // });
+    RoomsHandel.showAllRoomInfo(sender_psid);
     response = {
       "text": tmp
     };
