@@ -198,45 +198,12 @@ function handlePostback(sender_psid, received_postback) {
     callSendAPI(sender_psid, response);
   } else if (payload === '@_Create') {
     // random id phòng -> trả về key
-    createRoom(sender_psid);
+    RoomsHandel.createRoom(sender_psid);
   }
 
 }
 
-function randomKeyNumber(min, max) {
-  return Math.random() * (max - min) + min;
-}
 
-function createRoom(sender_psid){
-  let reponseMessage;
-  if(RoomsHandel.getRoomBySender(sender_psid) == undefined){
-    let roomid;
-
-    do {
-      roomid = Math.floor(randomKeyNumber(10000, 99999));
-    }
-    while (RoomsHandel.getRoomByRoomID(roomid) != undefined);
-
-    //tao phong
-      let room = new Room(roomid, 10, [], sender_psid.toString(), null, null, []);
-    //tao admin
-      let tempPlayer = new Player(sender_psid, true, true, "", roomid);
-      //insert admin to room and add room to gameRoomArray
-      room.players.push(tempPlayer);
-
-      RoomsHandel.addRoom(sender_psid, room);
-      reponseMessage = { "text": "You have created a game, your room ID is: "+ roomid};
-
-      setTimeout(function () {
-        checkRoomState(room, sender_psid);
-      }, 2000);
-
-  }else{
-    reponseMessage = { "text": "You owner a room !" };
-  }
-  callSendAPI(sender_psid, reponseMessage);
-	
-}
 
 // function getRoomByRoomUserID(roomID) {
 //   let key = [...gameRoomArray.entries()].filter(({ 1: v }) => v.roomId === roomID).map(([k]) => k);
