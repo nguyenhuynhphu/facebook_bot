@@ -94,11 +94,12 @@ module.exports = class RoomsHandel {
               if(room.players.length < room.number_player){
                   let newPlayer = new Player(sender, true, false, "", msg);
                   room.players.push(newPlayer);
+                  playersHandel.setPlayerRoom(sender, room.roomId);
                   responseMessage = { "text": "you have successfully joined the room: "+ text};
               }
           }
           else{
-            responseMessage = { "text": "room ID: "+msg+" invalid "};
+            responseMessage = { "text": "room ID: " + msg + " invalid "};
         }
         
         return responseMessage;
