@@ -97,7 +97,7 @@ module.exports = class RoomsHandel {
           else{
             responseMessage = { "text": "room ID: "+msg+" invalid "};
         }
-        callSendAPI(sender, responseMessage);
+        
         return responseMessage;
       }
       

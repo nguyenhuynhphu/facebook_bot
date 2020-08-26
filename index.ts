@@ -182,7 +182,7 @@ function handleMessage(sender_psid, received_message) {
   }else if(received_message.text.toLowerCase().includes("r[") && received_message.text.toLowerCase().includes("]") ){
     setRoles(sender_psid, received_message.text);
   }else if(received_message.text.toLowerCase().includes("j[") && received_message.text.toLowerCase().includes("]") ){
-    RoomsHandel.joinRoom(sender_psid, received_message.text);
+    response =RoomsHandel.joinRoom(sender_psid, received_message.text);
   }else{
 
   }
