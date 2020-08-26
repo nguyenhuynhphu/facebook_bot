@@ -46,19 +46,13 @@ app.post('/', (req, res) => {
       body.entry.forEach(function(entry) {
         const webhook_event = entry.messaging[0];
         const sender_psid = webhook_event.sender.id;
-        let currentPlayer = PlayersHandel.checkPlayerExits(sender_psid);
-        if(currentPlayer != undefined){
-          if (webhook_event.message) {
-            handleMessage(sender_psid, webhook_event.message);
-          } else if (webhook_event.postback) {
-            handlePostback(sender_psid, webhook_event.postback);
-          }
-        }else{
-          var response = {
-            "text": "Please send @start to connect with server before do anything !"
-          };
-          callSendAPI(sender_psid, response);
+        
+        if (webhook_event.message) {
+          handleMessage(sender_psid, webhook_event.message);
+        } else if (webhook_event.postback) {
+          handlePostback(sender_psid, webhook_event.postback);
         }
+
       });
       res.status(200).send('EVENT_RECEIVED');
     } else {
@@ -146,50 +140,58 @@ function callSendAPI(sender_psid, response) {
 //4287205711351255
 function handleMessage(sender_psid, received_message) {
   let response;
-  // Check if the message contains text
-  if (received_message.text.toLowerCase() === "@start") {
-    // kết nối với bot
-    accessGame(sender_psid);
-  }else if(received_message.text.toLowerCase() === "@all_room"){
-    let tmp = "";
-    RoomsHandel.showAllRoomInfo();
-    response = {
-      "text": "Show all room"
-    };
-  }else if(received_message.text.toLowerCase() === "@my_room"){
-    response = {
-      "text": RoomsHandel.getRoomBySender(sender_psid) ? showRoomInfo(RoomsHandel.getRoomBySender(sender_psid)) : "You don't have room !"
-    };
-  }else if(received_message.text.toLowerCase() === "@delete_room"){
-    RoomsHandel.removeRoom(sender_psid);
-    response = {
-      "text": "Your room have remove !"
-    };
-  }else if(received_message.text.toLowerCase() === "@role_all"){
-    response = Command.handelRoleAll();
-  }else if(received_message.text.toLowerCase() === "@test_msg"){
-    sender_psid = 4287205711351255;
-    response = {"text": "Oh yeah bạn !"};
-  }else if(received_message.text.toLowerCase() === "@all_player"){
-    response = {"text": PlayersHandel.showAllPlayer()};
-  }else if(received_message.text.toLowerCase() === "@disconnect"){
-    PlayersHandel.removePlayer(sender_psid);
-    response = {"text": "Disconnect Success !"};
-  }else if(received_message.text.toLowerCase() === "@help"){
-    response = Command.handelHelp();
-  }else if(received_message.text.toLowerCase() === "@newgame"){
-    response = Command.handelHelp();
-  }else if(received_message.text.toLowerCase() === "@out_room"){
-    //RoomsHandel.outRoom(sender_psid, received_message.text);
-  }else if(received_message.text.toLowerCase().includes("l[") && received_message.text.toLowerCase().includes("]") ){
-    setNumberPlayer(sender_psid, received_message.text);
-  }else if(received_message.text.toLowerCase().includes("r[") && received_message.text.toLowerCase().includes("]") ){
-    setRoles(sender_psid, received_message.text);
-  }else if(received_message.text.toLowerCase().includes("j[") && received_message.text.toLowerCase().includes("]") ){
-    response =RoomsHandel.joinRoom(sender_psid, received_message.text);
+  var currentUser = PlayersHandel.checkPlayerExits(sender_psid);
+  if(currentUser != undefined){
+    if(received_message.text.toLowerCase() === "@all_room"){
+      let tmp = "";
+      RoomsHandel.showAllRoomInfo();
+      response = {
+        "text": "Show all room"
+      };
+    }else if(received_message.text.toLowerCase() === "@my_room"){
+      response = {
+        "text": RoomsHandel.getRoomBySender(sender_psid) ? showRoomInfo(RoomsHandel.getRoomBySender(sender_psid)) : "You don't have room !"
+      };
+    }else if(received_message.text.toLowerCase() === "@delete_room"){
+      RoomsHandel.removeRoom(sender_psid);
+      response = {
+        "text": "Your room have remove !"
+      };
+    }else if(received_message.text.toLowerCase() === "@role_all"){
+      response = Command.handelRoleAll();
+    }else if(received_message.text.toLowerCase() === "@test_msg"){
+      sender_psid = 4287205711351255;
+      response = {"text": "Oh yeah bạn !"};
+    }else if(received_message.text.toLowerCase() === "@all_player"){
+      response = {"text": PlayersHandel.showAllPlayer()};
+    }else if(received_message.text.toLowerCase() === "@disconnect"){
+      PlayersHandel.removePlayer(sender_psid);
+      response = {"text": "Disconnect Success !"};
+    }else if(received_message.text.toLowerCase() === "@help"){
+      response = Command.handelHelp();
+    }else if(received_message.text.toLowerCase() === "@newgame"){
+      response = Command.handelHelp();
+    }else if(received_message.text.toLowerCase() === "@out_room"){
+      //RoomsHandel.outRoom(sender_psid, received_message.text);
+    }else if(received_message.text.toLowerCase().includes("l[") && received_message.text.toLowerCase().includes("]") ){
+      setNumberPlayer(sender_psid, received_message.text);
+    }else if(received_message.text.toLowerCase().includes("r[") && received_message.text.toLowerCase().includes("]") ){
+      setRoles(sender_psid, received_message.text);
+    }else if(received_message.text.toLowerCase().includes("j[") && received_message.text.toLowerCase().includes("]") ){
+      response =RoomsHandel.joinRoom(sender_psid, received_message.text);
+    }else{
+  
+    }
   }else{
-
+    if (received_message.text.toLowerCase() === "@start") {
+      accessGame(sender_psid);
+    }else{
+      response = {
+        "text": "Send @start before doing anything !"
+      };
+    }
   }
+  
   // Sends the response message
   callSendAPI(sender_psid, response);
 }
