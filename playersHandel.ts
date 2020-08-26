@@ -2,7 +2,7 @@ var Player = require('./models/Player.ts');
 var _ = require('lodash');
 module.exports = class PlayerHandel {
 
-    private static playersInSystem = new Array();
+    static playersInSystem = new Array();
 
     static checkPlayerExits(player){
         var tmp = false;
