@@ -171,6 +171,9 @@ function handleMessage(sender_psid, received_message) {
     response = {"text": "Oh yeah bạn !"};
   }else if(received_message.text.toLowerCase() === "@all_player"){
     response = {"text": PlayerHandel.showAllPlayer()};
+  }else if(received_message.text.toLowerCase() === "@disconnect"){
+    PlayerHandel.removePlayer(sender_psid);
+    response = {"text": "Disconnect Success !"};
   }else if(received_message.text.toLowerCase() === "@help"){
     response = Command.handelHelp();
   }else if(received_message.text.toLowerCase() === "@newgame"){
