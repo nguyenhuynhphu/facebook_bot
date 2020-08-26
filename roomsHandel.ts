@@ -18,7 +18,7 @@ module.exports = class RoomsHandel {
     }
 
     static addRoom(sender, room){
-       if(this.getRoomBySender(sender) != undefined){
+       if(this.getRoomBySender(sender) == undefined){
             this.gameRoomArray.set(sender, room);
        }else{
            console.log("addRoom", "Use Own Anthor Room");
