@@ -176,13 +176,13 @@ function handleMessage(sender_psid, received_message) {
   }else if(received_message.text.toLowerCase() === "@newgame"){
     response = Command.handelHelp();
   }else if(received_message.text.toLowerCase() === "@out_room"){
-    outRoom(sender_psid, received_message.text);
+    //RoomsHandel.outRoom(sender_psid, received_message.text);
   }else if(received_message.text.toLowerCase().includes("l[") && received_message.text.toLowerCase().includes("]") ){
     setNumberPlayer(sender_psid, received_message.text);
   }else if(received_message.text.toLowerCase().includes("r[") && received_message.text.toLowerCase().includes("]") ){
     setRoles(sender_psid, received_message.text);
   }else if(received_message.text.toLowerCase().includes("j[") && received_message.text.toLowerCase().includes("]") ){
-    joinRoom(sender_psid, received_message.text);
+    RoomsHandel.joinRoom(sender_psid, received_message.text);
   }else{
 
   }
@@ -204,46 +204,6 @@ function handlePostback(sender_psid, received_postback) {
 }
 
 
-
-// function getRoomByRoomUserID(roomID) {
-//   let key = [...gameRoomArray.entries()].filter(({ 1: v }) => v.roomId === roomID).map(([k]) => k);
-//   return gameRoomArray.get(key[0]);
-// }
-
-
-function joinRoom(sender,text){
-  let reponseMessage;
-  var msg = text.toLowerCase();
-  msg = msg.slice(2, msg.lastIndexOf("]"));
-  var room = RoomsHandel.getRoomByRoomID(msg);
-	if (room != undefined){
-		if(room.players.length < room.number_player){
-			let newPlayer = new Player(sender,true,false,"",msg);
-			room.players.push(newPlayer);
-			reponseMessage = { "text": "you have successfully joined the room: "+ text};
-		}
-	}
-	else{
-		reponseMessage = { "text": "room ID: "+msg+" invalid "};
-  }
-  callSendAPI(sender, reponseMessage);
-}
-
-function outRoom(sender, text){
-  var msg = text.toLowerCase();
-  msg = msg.slice(2, msg.lastIndexOf("]"));
-  var room = RoomsHandel.getRoomByRoomID(msg);
-	if (room != undefined){
-		for(var i = 0; i < room.players.length;i++){
-			if(room.players.get(i).id == sender){
-				room.players.splice(i, 1);
-			}
-		}	
-	}
-	else{
-		let joinMessage = { text: "room ID invalid"};
-	}
-}
 
 function showRoomInfo(room){
   let listPlayer = room.players;

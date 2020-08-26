@@ -81,4 +81,42 @@ module.exports = class RoomsHandel {
         return responseMessage;
     }
 
+    static joinRoom(sender, text){
+        let responseMessage;
+        var msg = text.toLowerCase();
+        msg = msg.slice(2, msg.lastIndexOf("]"));
+
+        var room = this.getRoomByRoomID(msg);
+          if (room != undefined){
+              if(room.players.length < room.number_player){
+                  let newPlayer = new Player(sender, true, false, "", msg);
+                  room.players.push(newPlayer);
+                  responseMessage = { "text": "you have successfully joined the room: "+ text};
+              }
+          }
+          else{
+            responseMessage = { "text": "room ID: "+msg+" invalid "};
+        }
+        callSendAPI(sender, responseMessage);
+        return responseMessage;
+      }
+      
+    // static outRoom(sender){
+    //     var msg = text.toLowerCase();
+    //     msg = msg.slice(2, msg.lastIndexOf("]"));
+    //     var room = this.getRoomByRoomID(msg);
+    //       if (room != undefined){
+    //           for(var i = 0; i < room.players.length;i++){
+    //               if(room.players.get(i).id == sender){
+    //                 _.pull(room.players, room.players.get(i));
+    //               }
+    //           }	
+    //       }
+    //       else{
+    //           let responseMessage = { text: "Room ID invalid"};
+    //       }
+    //     return responseMessage;
+    // }
+      
+
 }
