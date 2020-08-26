@@ -30,5 +30,11 @@ module.exports = class PlayerHandel {
        }
     }
 
-    
+    static showAllPlayer(){
+        let tmp;
+        this.playersInSystem.forEach(element => {
+            tmp += showPlayerInfo(element) + "\n";
+        });
+        return tmp;
+    }
 }

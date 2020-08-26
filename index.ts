@@ -169,6 +169,8 @@ function handleMessage(sender_psid, received_message) {
   }else if(received_message.text.toLowerCase() === "@test_msg"){
     sender_psid = 4287205711351255;
     response = {"text": "Oh yeah bạn !"};
+  }else if(received_message.text.toLowerCase() === "@all_player"){
+    response = {"text": PlayerHandel.showAllPlayer()};
   }else if(received_message.text.toLowerCase() === "@help"){
     response = Command.handelHelp();
   }else if(received_message.text.toLowerCase() === "@newgame"){
