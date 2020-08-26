@@ -15,7 +15,7 @@ module.exports = class PlayerHandel {
     }
 
     static removePlayer(sender){
-        if(!this.checkPlayerExits(sender)){
+        if(this.checkPlayerExits(sender)){
             this.playersInSystem.forEach(element => {
                 if(element.id == sender){
                     _.pull(this.playersInSystem, element);
@@ -36,7 +36,7 @@ module.exports = class PlayerHandel {
     }
 
     static showAllPlayer(){
-        let tmp;
+        let tmp = "";
         this.playersInSystem.forEach(element => {
             tmp += this.showPlayerInfo(element) + "\n";
         });
