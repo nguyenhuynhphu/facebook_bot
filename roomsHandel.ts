@@ -107,15 +107,14 @@ module.exports = class RoomsHandel {
     static outRoom(sender){
         var player = playersHandel.checkPlayerExits(sender);
         var room = this.getRoomByRoomID(player.room);
-        var responseMessage = "Success";
+        var responseMessage = { text: "Room ID invalid"};
         if (room != undefined){
-            for(var i = 0; i < room.players.length;i++){
-                if(room.players.get(i).id == sender){
-                _.pull(room.players, room.players.get(i));
-                }
+            for(var i = 0; i < room.players.length; i++){
+                if(room.players.get(i).id.toString() == sender.toString()){
+                    _.pull(room.players, room.players.get(i));
+                }   
             }	
-        }
-        else{
+        } else{
             let responseMessage = { text: "Room ID invalid"};
         }
         return responseMessage;
