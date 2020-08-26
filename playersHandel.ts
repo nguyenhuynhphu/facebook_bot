@@ -1,21 +1,20 @@
 var Player = require('./models/Player.ts');
 var _ = require('lodash');
-module.exports = class PlayerHandel {
+module.exports = class PlayersHandel {
 
     static playersInSystem = new Array();
 
     static checkPlayerExits(sender){
-        var tmp = false;
+        var tmp = undefined;
         this.playersInSystem.forEach(element => {
             if(element.id.toString() == sender.toString()){
-                tmp = true;
+                tmp = element;
             }
         });
         return tmp;
     }
-
     static removePlayer(sender){
-        if(this.checkPlayerExits(sender)){
+        if(this.checkPlayerExits(sender) != undefined){
             this.playersInSystem.forEach(element => {
                 if(element.id == sender){
                     _.pull(this.playersInSystem, element);
@@ -28,7 +27,7 @@ module.exports = class PlayerHandel {
 
     static addPlayer(player){
         console.log(player);
-       if(!this.checkPlayerExits(player.id)){
+       if(this.checkPlayerExits(player.id) == undefined){
             this.playersInSystem.push(player);
        }else{
            console.log("addPlayer", "DUPLICATE USER");
@@ -46,4 +45,24 @@ module.exports = class PlayerHandel {
     static showPlayerInfo(player){
         return `${player.id}`;
     }
+
+    
+    static setPlayerRoom(sender, roomId){
+        var tmpPlayer = this.checkPlayerExits(sender);
+        if(tmpPlayer != undefined){
+            tmpPlayer.room = roomId;
+            return "SUCC";
+        }
+        return "FAIL";
+    }
+
+    static setPlayerAdmin(sender){
+        var tmpPlayer = this.checkPlayerExits(sender);
+        if(tmpPlayer != undefined){
+            tmpPlayer.admin = true;
+            return "SUCC";
+        }
+        return "FAIL";
+    }
+
 }

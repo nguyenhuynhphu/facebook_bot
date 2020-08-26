@@ -7,11 +7,11 @@ const
   PAGE_ACCESS_TOKEN = "EAAJDVVZAcvT0BAAjWSxIooCWPk3M8ZB7t1tTdnxA27wlhoJz3YDr98qA11jfBCWQk8I2p9LvwYDtG6tUisB9rSQr3nshviwb0HLKntcZCv4XoENGscTcgEavKs0er394waPHDOePbIZB5pwZAwzMqZBWGrZAMnxlaEhY0S7LQ2ZBWwZDZD",
   express = require('express'),
   Command = require('./command.ts'),
-  PlayerHandel = require('./playersHandel.ts'),
+  PlayersHandel = require('./playersHandel.ts'),
+  RoomsHandel = require('./roomsHandel.ts'),
   request = require('request'),
   bodyParser = require('body-parser'),
   app = express().use(bodyParser.json()); // creates express http server
-const gameRoomArray = new Map();
 
 let systemRoles = require("./roles.ts");
 
@@ -67,7 +67,7 @@ app.post('/', (req, res) => {
 
 function accessGame(sender_psid){
   let tmp = new Player(sender_psid, true, false, null, null);
-  PlayerHandel.addPlayer(tmp);
+  PlayersHandel.addPlayer(tmp);
   // Construct the message body
   const request_body = {
     "recipient": {
@@ -147,20 +147,19 @@ function handleMessage(sender_psid, received_message) {
     // kết nối với bot
     accessGame(sender_psid);
   }else if(received_message.text.toLowerCase() === "@all_room"){
-    console.log("ALL ROOM", gameRoomArray);
     let tmp = "";
-    gameRoomArray.forEach(element => {
-      tmp += element.toString() + "\n";      
-    });
+    // gameRoomArray.forEach(element => {
+    //   tmp += element.toString() + "\n";      
+    // });
     response = {
       "text": tmp
     };
   }else if(received_message.text.toLowerCase() === "@my_room"){
     response = {
-      "text": findRoom(sender_psid) ? showRoomInfo(findRoom(sender_psid)) : "You don't have room !"
+      "text": RoomsHandel.getRoomBySender(sender_psid) ? showRoomInfo(RoomsHandel.getRoomBySender(sender_psid)) : "You don't have room !"
     };
   }else if(received_message.text.toLowerCase() === "@delete_room"){
-    gameRoomArray.delete(sender_psid);
+    RoomsHandel.removeRoom(sender_psid);
     response = {
       "text": "Your room have remove !"
     };
@@ -170,9 +169,9 @@ function handleMessage(sender_psid, received_message) {
     sender_psid = 4287205711351255;
     response = {"text": "Oh yeah bạn !"};
   }else if(received_message.text.toLowerCase() === "@all_player"){
-    response = {"text": PlayerHandel.showAllPlayer()};
+    response = {"text": PlayersHandel.showAllPlayer()};
   }else if(received_message.text.toLowerCase() === "@disconnect"){
-    PlayerHandel.removePlayer(sender_psid);
+    PlayersHandel.removePlayer(sender_psid);
     response = {"text": "Disconnect Success !"};
   }else if(received_message.text.toLowerCase() === "@help"){
     response = Command.handelHelp();
@@ -195,11 +194,7 @@ function handleMessage(sender_psid, received_message) {
 
 function handlePostback(sender_psid, received_postback) {
   let response;
-
-  // Get the payload for the postback
   const payload = received_postback.payload;
-
-  // Set the response based on the postback payload
   if (payload === '@_Join') {
     response = { "text": "You join a game, send me your key: " };
     callSendAPI(sender_psid, response);
@@ -216,26 +211,28 @@ function randomKeyNumber(min, max) {
 
 function createRoom(sender_psid){
   let reponseMessage;
-  if(!findRoom(sender_psid)){
+  if(RoomsHandel.getRoomBySender(sender_psid) == undefined){
     let roomid;
+
     do {
-      roomid = Math.floor(randomKeyNumber(10000,99999));
+      roomid = Math.floor(randomKeyNumber(10000, 99999));
     }
-    while (getRoomByRoomID(roomid) != undefined);
+    while (RoomsHandel.getRoomByRoomID(roomid) != undefined);
+
     //tao phong
       let room = new Room(roomid, 10, [], sender_psid.toString(), null, null, []);
-      console.log("NEW ROOM", room);
     //tao admin
       let tempPlayer = new Player(sender_psid, true, true, "", roomid);
-      console.log("Admin", tempPlayer);
       //insert admin to room and add room to gameRoomArray
       room.players.push(tempPlayer);
-      gameRoomArray.set(sender_psid, room);
+
+      RoomsHandel.addRoom(sender_psid, room);
       reponseMessage = { "text": "You have created a game, your room ID is: "+ roomid};
 
       setTimeout(function () {
         checkRoomState(room, sender_psid);
       }, 2000);
+
   }else{
     reponseMessage = { "text": "You owner a room !" };
   }
@@ -248,27 +245,16 @@ function createRoom(sender_psid){
 //   return gameRoomArray.get(key[0]);
 // }
 
-function getRoomByRoomID(searchValue) {
-  let tmp;
-  gameRoomArray.forEach(element => {
-    if (element.roomId.toString() == searchValue){
-      tmp = element;
-    }
-  });
-  console.log("Admin", tmp);
-  return tmp;
-}
-
 
 function joinRoom(sender,text){
   let reponseMessage;
   var msg = text.toLowerCase();
   msg = msg.slice(2, msg.lastIndexOf("]"));
-
-	if (getRoomByRoomID(msg) != undefined){
-		if(getRoomByRoomID(msg).players.length < getRoomByRoomID(msg).number_player){
+  var room = RoomsHandel.getRoomByRoomID(msg);
+	if (room != undefined){
+		if(room.players.length < room.number_player){
 			let newPlayer = new Player(sender,true,false,"",msg);
-			getRoomByRoomID(msg).players.push(newPlayer);
+			room.players.push(newPlayer);
 			reponseMessage = { "text": "you have successfully joined the room: "+ text};
 		}
 	}
@@ -281,10 +267,11 @@ function joinRoom(sender,text){
 function outRoom(sender, text){
   var msg = text.toLowerCase();
   msg = msg.slice(2, msg.lastIndexOf("]"));
-	if (getRoomByRoomID(msg) != undefined){
-		for(var i = 0; i < getRoomByRoomID(msg).players.length;i++){
-			if(getRoomByRoomID(msg).players.get(i).id == sender){
-				getRoomByRoomID(msg).players.splice(i, 1);
+  var room = RoomsHandel.getRoomByRoomID(msg);
+	if (room != undefined){
+		for(var i = 0; i < room.players.length;i++){
+			if(room.players.get(i).id == sender){
+				room.players.splice(i, 1);
 			}
 		}	
 	}
@@ -314,24 +301,19 @@ function showPlayerInfo(player){
 }
 
 //check thằng đó có phải là admin của phòng nào không
-function findRoom(sender){
-  let tmp = gameRoomArray.get(sender);
-  return tmp;
-}
 
 function setNumberPlayer(sender_psid, received_message){
-  var room = findRoom(sender_psid.toString());
+  var room = RoomsHandel.getRoomBySender(sender_psid.toString());
   if(room != undefined){
     var msg = received_message.toLowerCase();
     msg = msg.slice(2, msg.lastIndexOf("]"));
     room.number_player = Number.parseInt(msg);
-    console.log("SET NUMBER PLAYER", room);
     checkRoomState(room, sender_psid);
   }
 }
 
 function setRoles(sender_psid, received_message){
-  var room = findRoom(sender_psid.toString());
+  var room = RoomsHandel.getRoomBySender(sender_psid.toString());
   room.usingRole = [];
   if(room != undefined){
     var msg = received_message.toLowerCase();
