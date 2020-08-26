@@ -198,7 +198,8 @@ function handlePostback(sender_psid, received_postback) {
     callSendAPI(sender_psid, response);
   } else if (payload === '@_Create') {
     // random id phòng -> trả về key
-    RoomsHandel.createRoom(sender_psid);
+    response = RoomsHandel.createRoom(sender_psid);
+    callSendAPI(sender_psid, response);
   }
 
 }
