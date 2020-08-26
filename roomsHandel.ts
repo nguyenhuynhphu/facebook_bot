@@ -1,6 +1,9 @@
 var Room = require('./models/Room.ts');
 var Player = require('./models/Player.ts');
+const playersHandel = require('./playersHandel.ts');
 var _ = require('lodash');
+
+
 module.exports = class RoomsHandel {
 
     static gameRoomArray = new Map();
@@ -101,22 +104,22 @@ module.exports = class RoomsHandel {
         return responseMessage;
       }
       
-    // static outRoom(sender){
-    //     var msg = text.toLowerCase();
-    //     msg = msg.slice(2, msg.lastIndexOf("]"));
-    //     var room = this.getRoomByRoomID(msg);
-    //       if (room != undefined){
-    //           for(var i = 0; i < room.players.length;i++){
-    //               if(room.players.get(i).id == sender){
-    //                 _.pull(room.players, room.players.get(i));
-    //               }
-    //           }	
-    //       }
-    //       else{
-    //           let responseMessage = { text: "Room ID invalid"};
-    //       }
-    //     return responseMessage;
-    // }
+    static outRoom(sender){
+        var player = playersHandel.checkPlayerExits(sender);
+        var room = this.getRoomByRoomID(player.room);
+        var responseMessage = "Success";
+        if (room != undefined){
+            for(var i = 0; i < room.players.length;i++){
+                if(room.players.get(i).id == sender){
+                _.pull(room.players, room.players.get(i));
+                }
+            }	
+        }
+        else{
+            let responseMessage = { text: "Room ID invalid"};
+        }
+        return responseMessage;
+    }
       
 
 }

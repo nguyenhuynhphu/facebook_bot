@@ -172,13 +172,13 @@ function handleMessage(sender_psid, received_message) {
     }else if(received_message.text.toLowerCase() === "@newgame"){
       response = Command.handelHelp();
     }else if(received_message.text.toLowerCase() === "@out_room"){
-      //RoomsHandel.outRoom(sender_psid, received_message.text);
+      response = RoomsHandel.outRoom(sender_psid);
     }else if(received_message.text.toLowerCase().includes("l[") && received_message.text.toLowerCase().includes("]") ){
       setNumberPlayer(sender_psid, received_message.text);
     }else if(received_message.text.toLowerCase().includes("r[") && received_message.text.toLowerCase().includes("]") ){
       setRoles(sender_psid, received_message.text);
     }else if(received_message.text.toLowerCase().includes("j[") && received_message.text.toLowerCase().includes("]") ){
-      response =RoomsHandel.joinRoom(sender_psid, received_message.text);
+      response = RoomsHandel.joinRoom(sender_psid, received_message.text);
     }else{
   
     }
