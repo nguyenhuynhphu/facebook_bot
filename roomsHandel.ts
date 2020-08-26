@@ -114,9 +114,9 @@ module.exports = class RoomsHandel {
         if (room != undefined){
             console.log("RUN");
             for(var i = 0; i < room.players.length; i++){
-                if(room.players.get(i).id.toString() == sender.toString()){
+                if(room.players[i].id.toString() == sender.toString()){
                     console.log("Mathch"); 
-                    _.pull(room.players, room.players.get(i));
+                    _.pull(room.players, room.players[i]);
                 }   
             }
             console.log("REMOVE COMPLETE", room.players)
