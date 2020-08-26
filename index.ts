@@ -148,7 +148,7 @@ function handleMessage(sender_psid, received_message) {
     accessGame(sender_psid);
   }else if(received_message.text.toLowerCase() === "@all_room"){
     let tmp = "";
-    RoomsHandel.showAllRoomInfo(sender_psid);
+    RoomsHandel.showAllRoomInfo();
     response = {
       "text": tmp
     };
