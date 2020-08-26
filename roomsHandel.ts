@@ -31,7 +31,7 @@ module.exports = class RoomsHandel {
     static getRoomByRoomID(roomID) {
         let tmp;
         this.gameRoomArray.forEach(element => {
-          if (element.roomId.toString() == roomID){
+          if (element.roomId.toString() == roomID.toString()){
             tmp = element;
           }
         });
@@ -106,16 +106,21 @@ module.exports = class RoomsHandel {
       
     static outRoom(sender){
         var player = playersHandel.checkPlayerExits(sender);
+        console.log("PLAYER", player);
         var room = this.getRoomByRoomID(player.room);
-        var responseMessage = { text: "Room ID invalid"};
+        console.log("ROOM", room);
+        var responseMessage = { text: "You been remove !"};
         if (room != undefined){
+            console.log("RUN");
             for(var i = 0; i < room.players.length; i++){
                 if(room.players.get(i).id.toString() == sender.toString()){
+                    console.log("Mathch"); 
                     _.pull(room.players, room.players.get(i));
                 }   
-            }	
+            }
+            console.log("REMOVE COMPLETE", room.players)
         } else{
-            let responseMessage = { text: "Room ID invalid"};
+            responseMessage = { text: "Room ID invalid"};
         }
         return responseMessage;
     }
