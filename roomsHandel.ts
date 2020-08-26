@@ -47,7 +47,7 @@ module.exports = class RoomsHandel {
     }
     static showAllRoomInfo(){
         this.gameRoomArray.forEach(element => {
-            console.log(element)
+            console.log(element);
         });
     }
 

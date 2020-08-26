@@ -119,7 +119,7 @@ function callSendAPI(sender_psid, response) {
     "recipient": {
       "id": sender_psid
     },
-    "message": response
+    "message": response.message.text
   }
 
   // Send the HTTP request to the Messenger Platform
@@ -130,7 +130,7 @@ function callSendAPI(sender_psid, response) {
     "json": request_body
   }, (err, res, body) => {
     if (!err) {
-      console.log('message sent!')
+      
     } else {
       console.error("Unable to send message:" + err);
     }
@@ -150,7 +150,7 @@ function handleMessage(sender_psid, received_message) {
     let tmp = "";
     RoomsHandel.showAllRoomInfo();
     response = {
-      "text": tmp
+      "text": "Show all room"
     };
   }else if(received_message.text.toLowerCase() === "@my_room"){
     response = {
