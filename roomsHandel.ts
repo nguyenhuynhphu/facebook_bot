@@ -89,41 +89,47 @@ module.exports = class RoomsHandel {
         var msg = text.toLowerCase();
         msg = msg.slice(2, msg.lastIndexOf("]"));
 
-        var room = this.getRoomByRoomID(msg);
-          if (room != undefined){
-              if(room.players.length < room.number_player){
-                  let newPlayer = new Player(sender, true, false, "", msg);
-                  room.players.push(newPlayer);
-                  playersHandel.setPlayerRoom(sender, room.roomId);
-                  responseMessage = { "text": "you have successfully joined the room: "+ text};
-              }
-          }
-          else{
-            responseMessage = { "text": "room ID: " + msg + " invalid "};
+        var playerTmp = playersHandel.checkPlayerExits(sender);
+        if(playerTmp.room == null){
+            var room = this.getRoomByRoomID(msg);
+            if (room != undefined){
+                if(room.players.length < room.number_player){
+                    let newPlayer = new Player(sender, true, false, "", msg);
+                    room.players.push(newPlayer);
+                    playersHandel.setPlayerRoom(sender, room.roomId);
+                    responseMessage = { "text": "you have successfully joined the room: "+ text};
+                }
+            }
+            else{
+                responseMessage = { "text": "room ID: " + msg + " invalid "};
+            }
+        }else{
+            responseMessage = { "text": "You in anthor room, please quit room before join another room !"};
         }
-        
         return responseMessage;
-      }
+    }
       
     static outRoom(sender){
         var player = playersHandel.checkPlayerExits(sender);
-        console.log("PLAYER", player);
-        var room = this.getRoomByRoomID(player.room);
-        console.log("ROOM", room);
-        var responseMessage = { text: "You been remove !"};
-        if (room != undefined){
-            console.log("RUN");
-            for(var i = 0; i < room.players.length; i++){
-                if(room.players[i].id.toString() == sender.toString()){
-                    console.log("Mathch"); 
-                    _.pull(room.players, room.players[i]);
-                }   
+        if(player.room != null){
+            var room = this.getRoomByRoomID(player.room);
+
+            var responseMessage = { text: "You been remove !"};
+            if (room != undefined){
+                for(var i = 0; i < room.players.length; i++){
+                    if(room.players[i].id.toString() == sender.toString()){
+                        _.pull(room.players, room.players[i]);
+                    }   
+                }
+            } else{
+                responseMessage = { text: "Room ID invalid"};
             }
-            console.log("REMOVE COMPLETE", room.players)
-        } else{
-            responseMessage = { text: "Room ID invalid"};
+            
+        }else{
+            responseMessage = { text: "You not in any room !"};
         }
         return responseMessage;
+        
     }
       
 

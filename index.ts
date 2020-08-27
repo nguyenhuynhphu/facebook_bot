@@ -148,10 +148,6 @@ function handleMessage(sender_psid, received_message) {
       response = {
         "text": "Show all room"
       };
-    }else if(received_message.text.toLowerCase() === "@my_room"){
-      response = {
-        "text": RoomsHandel.getRoomBySender(sender_psid) ? showRoomInfo(RoomsHandel.getRoomBySender(sender_psid)) : "You don't have room !"
-      };
     }else if(received_message.text.toLowerCase() === "@delete_room"){
       RoomsHandel.removeRoom(sender_psid);
       response = {
@@ -212,25 +208,25 @@ function handlePostback(sender_psid, received_postback) {
 
 
 
-function showRoomInfo(room){
-  let listPlayer = room.players;
-  let strPlayer = "";
-  listPlayer.forEach(element => {
-    strPlayer += showPlayerInfo(element) + "\n";
-  });
-  let tmp = `
-    RoomID = ${room.roomId}
-  AdminId = ${room.adminId}
-  Number Player = ${room.number_player}
-    Players in Room:
-    ${strPlayer}
-  `
-  return tmp;
-}
+// function showRoomInfo(room){
+//   let listPlayer = room.players;
+//   let strPlayer = "";
+//   listPlayer.forEach(element => {
+//     strPlayer += showPlayerInfo(element) + "\n";
+//   });
+//   let tmp = `
+//     RoomID = ${room.roomId}
+//   AdminId = ${room.adminId}
+//   Number Player = ${room.number_player}
+//     Players in Room:
+//     ${strPlayer}
+//   `
+//   return tmp;
+// }
 
-function showPlayerInfo(player){
-  return `${player.id}`;
-}
+// function showPlayerInfo(player){
+//   return `${player.id}`;
+// }
 
 //check thằng đó có phải là admin của phòng nào không
 
