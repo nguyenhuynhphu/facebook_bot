@@ -138,6 +138,9 @@ module.exports = class RoomsHandel {
             var ownerRoom = this.getRoomBySender(sender);
             if(ownerRoom){ //nếu nó là admin
                 player.room = null; //xóa room đưuọc ref từ list player
+                ownerRoom.players.forEach(sender => {
+                    playersHandel.outRoom(sender)
+                });
                 this.removeRoom(sender);
                 responseMessage = {
                     text: `Phòng ${ownerRoom.roomId} đã bị xóa !`, 
