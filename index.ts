@@ -113,27 +113,55 @@ function accessGame(sender_psid){
 
 function callSendAPI(sender_psid, response) {
   // Construct the message body
-  const request_body = {
-    "recipient": {
-      "id": sender_psid
-    },
-    "message": response
-  }
-
-  // Send the HTTP request to the Messenger Platform
-  request({
-    "uri": "https://graph.facebook.com/v2.6/me/messages",
-    "qs": { "access_token": PAGE_ACCESS_TOKEN },
-    "method": "POST",
-    "json": request_body
-  }, (err, res, body) => {
-    if (!err) {
-      
-    } else {
-      console.error("Unable to send message:" + err);
+  if(response.listSender != undefined){
+    let array = response.listSender;
+    console.log(array);
+    array.forEach(senderId => {
+      var request_body = {
+        "recipient": {
+          "id": senderId
+        },
+        "message": {
+          "text": "Chủ phòng đã xóa phòng !"
+        }
+      }
+      request({
+        "uri": "https://graph.facebook.com/v2.6/me/messages",
+        "qs": { "access_token": PAGE_ACCESS_TOKEN },
+        "method": "POST",
+        "json": request_body
+      }, (err, res, body) => {
+        if (!err) {
+          
+        } else {
+          console.error("Unable to send message:" + err);
+        }
+      });
+    });
+  }else{
+    const request_body = {
+      "recipient": {
+        "id": sender_psid
+      },
+      "message": response
     }
-  });
-
+  
+    // Send the HTTP request to the Messenger Platform
+    request({
+      "uri": "https://graph.facebook.com/v2.6/me/messages",
+      "qs": { "access_token": PAGE_ACCESS_TOKEN },
+      "method": "POST",
+      "json": request_body
+    }, (err, res, body) => {
+      if (!err) {
+        
+      } else {
+        console.error("Unable to send message:" + err);
+      }
+    });
+  
+  }
+  
 }
 
 
@@ -143,7 +171,6 @@ function handleMessage(sender_psid, received_message) {
   var currentUser = PlayersHandel.checkPlayerExits(sender_psid);
   if(currentUser != undefined){
     if(received_message.text.toLowerCase() === "@all_room"){
-      let tmp = "";
       RoomsHandel.showAllRoomInfo();
       response = {
         "text": "Show all room"
@@ -161,14 +188,14 @@ function handleMessage(sender_psid, received_message) {
     }else if(received_message.text.toLowerCase() === "@all_player"){
       response = {"text": PlayersHandel.showAllPlayer()};
     }else if(received_message.text.toLowerCase() === "@disconnect"){
-      PlayersHandel.removePlayer(sender_psid);
-      response = {"text": "Disconnect Success !"};
+      // PlayersHandel.removePlayer(sender_psid);
+      // response = {"text": "Disconnect Success !"};
     }else if(received_message.text.toLowerCase() === "@help"){
       response = Command.handelHelp();
     }else if(received_message.text.toLowerCase() === "@newgame"){
       response = Command.handelHelp();
     }else if(received_message.text.toLowerCase() === "@out_room"){
-      response = RoomsHandel.outRoom(sender_psid);
+      response = RoomsHandel.e(sender_psid);
     }else if(received_message.text.toLowerCase().includes("l[") && received_message.text.toLowerCase().includes("]") ){
       setNumberPlayer(sender_psid, received_message.text);
     }else if(received_message.text.toLowerCase().includes("r[") && received_message.text.toLowerCase().includes("]") ){

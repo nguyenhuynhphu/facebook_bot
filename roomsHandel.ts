@@ -57,7 +57,14 @@ module.exports = class RoomsHandel {
 
     static randomKeyNumber(min, max) {
         return Math.random() * (max - min) + min;
-      }
+    }
+    static convertArrayToString(str){
+        let tmp = "";
+        str.forEach(element => {
+            tmp += element + "|"
+        });
+        return tmp.slice(0, tmp.length - 1);
+    }
     //tạo phòng bth - Y
     //đang trong phòng người khác mà tạo phong - N
     //có phòng rồi mà tạo nửa - X
@@ -86,7 +93,7 @@ module.exports = class RoomsHandel {
                 responseMessage = { "text": "Bạn đang làm chủ 1 phòng" };
             }
         }else{
-            responseMessage = { "text": "Bạn đang trong 1 phòng khác, không thể tạo phòng !" };
+            responseMessage = { "text": "Bạn đang trong phòng, hãy thoát trước khi muốn làm gì khác !" };
         }
         
         return responseMessage;
@@ -105,38 +112,48 @@ module.exports = class RoomsHandel {
             var room = this.getRoomByRoomID(msg);
             if (room != undefined){ // nếu phòng k có thì k cho dô
                 if(room.players.length < room.number_player){ // nếu phòng đầy thì không cho dô
-                    
-                    let newPlayer = new Player(sender, true, false, "", msg);
-                    room.players.push(newPlayer);
+                    room.players.push(sender);
                     playersHandel.setPlayerRoom(sender, room.roomId);
-                    responseMessage = { "text": "Vào phòng " + text + " thành công !"};
+                    responseMessage = { text: "Vào phòng " + text + " thành công !"};
                 
                 }else{
-                    responseMessage = { "text": "Phòng này full người bạn ơi"};
+                    responseMessage = { text: "Phòng này full người bạn ơi"};
                 }
             }
             else{
-                responseMessage = { "text": "Không tìm thấy phòng: " + msg};
+                responseMessage = { text: "Không tìm thấy phòng: " + msg};
             }
         }else{
-            responseMessage = { "text": "Bạn đang trong 1 phòng khác, hãy thoát khỏi phòng trước khi tham gia phòng khác !"};
+            responseMessage = { text: "Bạn đang trong 1 phòng khác, hãy thoát khỏi phòng trước khi tham gia phòng khác !"};
         }
         return responseMessage;
     }
     //chưa vào phòng nào mà out - X
     //out phòng bth - Y
+    //nếu admin rời khỏi phòng, xóa phòng đi, thông báo là phòng đã bị hủy - N
     static outRoom(sender){
         var player = playersHandel.checkPlayerExits(sender);
+        var responseMessage;
         if(player.room != null){ // chưa vào phòng nào mà muốn out
-            var room = this.getRoomByRoomID(player.room);
-            var responseMessage = { text: "Bạn đã thoát khỏi phòng " + player.room};
+            var ownerRoom = this.getRoomBySender(sender);
+            if(ownerRoom){ //nếu nó là admin
+                player.room = null; //xóa room đưuọc ref từ list player
+                this.removeRoom(sender);
+                responseMessage = {
+                    text: `Phòng ${ownerRoom.roomId} đã bị xóa !`, 
+                    listSender: ownerRoom.players
+                }
+            }else{
+                var room = this.getRoomByRoomID(player.room);
+                responseMessage = { text: "Bạn đã thoát khỏi phòng " + player.room};
 
-            player.room = null; //xóa room đưuọc ref từ list player
+                player.room = null; //xóa room đưuọc ref từ list player
 
-            for(var i = 0; i < room.players.length; i++){
-                if(room.players[i].id.toString() == sender.toString()){
-                    _.pull(room.players, room.players[i]); //xóa room ra khỏi hệ thống
-                }   
+                for(var i = 0; i < room.players.length; i++){
+                    if(room.players[i].id.toString() == sender.toString()){
+                        _.pull(room.players, room.players[i]); //xóa room ra khỏi hệ thống
+                    }   
+                }
             }
         }else{
             responseMessage = { text: "Bạn không ở trong phòng nào để thoát !"};
