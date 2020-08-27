@@ -80,7 +80,7 @@ module.exports = class RoomsHandel {
                 room.players.push(tempPlayer);
                 playersHandel.checkPlayerExits(sender_psid).room = roomid;
                 this.addRoom(sender_psid, room);
-                responseMessage = { "text": "Bạn đã tạo 1 phòng chơi, ID của phòng là: " + roomid + ", gởi nó cho bạn bè nhé !"};
+                responseMessage = { "text": "Bạn đã tạo 1 phòng chơi, ID của phòng là: " + roomid + ", gửi nó cho bạn bè nhé !"};
             
             }else{
                 responseMessage = { "text": "Bạn đang làm chủ 1 phòng" };
@@ -105,14 +105,12 @@ module.exports = class RoomsHandel {
             var room = this.getRoomByRoomID(msg);
             if (room != undefined){ // nếu phòng k có thì k cho dô
                 if(room.players.length < room.number_player){ // nếu phòng đầy thì không cho dô
-                    if(playerTmp.room.toString() != sender){ // bạn đang ở trong phòng mà vào nửa thì éo cho
-                        let newPlayer = new Player(sender, true, false, "", msg);
-                        room.players.push(newPlayer);
-                        playersHandel.setPlayerRoom(sender, room.roomId);
-                        responseMessage = { "text": "Vào phòng " + text + " thành công !"};
-                    }else{
-                        responseMessage = { "text": "Bạn đã vào bên trong " + text};
-                    }
+                    
+                    let newPlayer = new Player(sender, true, false, "", msg);
+                    room.players.push(newPlayer);
+                    playersHandel.setPlayerRoom(sender, room.roomId);
+                    responseMessage = { "text": "Vào phòng " + text + " thành công !"};
+                
                 }else{
                     responseMessage = { "text": "Phòng này full người bạn ơi"};
                 }
