@@ -137,15 +137,17 @@ module.exports = class RoomsHandel {
         if(player.room != null){ // chưa vào phòng nào mà muốn out
             var ownerRoom = this.getRoomBySender(sender);
             if(ownerRoom){ //nếu nó là admin
-                player.room = null; //xóa room đưuọc ref từ list player
-                ownerRoom.players.forEach(sender => {
-                    playersHandel.outRoom(sender)
-                });
-                this.removeRoom(sender);
                 responseMessage = {
                     text: `Phòng ${ownerRoom.roomId} đã bị xóa !`, 
                     listSender: ownerRoom.players
                 }
+                ownerRoom.players.forEach(sender => {
+                    console.log("SENDER", sender);
+                    playersHandel.outRoom(sender);
+                });
+                // chưa xóa phòng cho các player trong phòng
+                this.removeRoom(sender);
+                
             }else{
                 var room = this.getRoomByRoomID(player.room);
                 responseMessage = { text: "Bạn đã thoát khỏi phòng " + player.room};

@@ -65,6 +65,7 @@ module.exports = class PlayersHandel {
         }
         return "FAIL";
     }
+    
     static outRoom(sender){
         var tmp = this.checkPlayerExits(sender);
         tmp.room = null;
