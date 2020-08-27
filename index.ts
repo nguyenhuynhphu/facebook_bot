@@ -123,7 +123,7 @@ function callSendAPI(sender_psid, response) {
             "id": senderId
           },
           "message": {
-            "text": "Chủ phòng đã xóa phòng !"
+            "text": "Phòng đã bị xóa phòng !"
           }
         }
         request({

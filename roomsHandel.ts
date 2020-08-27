@@ -154,8 +154,8 @@ module.exports = class RoomsHandel {
                 player.room = null; //xóa room đưuọc ref từ list player
 
                 for(var i = 0; i < room.players.length; i++){
-                    if(room.players[i].id.toString() == sender.toString()){
-                        _.pull(room.players, room.players[i]); //xóa room ra khỏi hệ thống
+                    if(room.players[i].toString() == sender.toString()){
+                        _.pull(room.players, sender); //xóa user ra khỏi room ra khỏi hệ thống
                     }   
                 }
             }
