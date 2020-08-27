@@ -82,9 +82,8 @@ module.exports = class RoomsHandel {
                 //tao phong
                 let room = new Room(roomid, 10, [], sender_psid.toString(), null, null, []);
                 //tao admin
-                let tempPlayer = new Player(sender_psid, true, true, "", roomid);
                 //insert admin to room and add room to gameRoomArray
-                room.players.push(tempPlayer);
+                room.players.push(sender_psid);
                 playersHandel.checkPlayerExits(sender_psid).room = roomid;
                 this.addRoom(sender_psid, room);
                 responseMessage = { "text": "Bạn đã tạo 1 phòng chơi, ID của phòng là: " + roomid + ", gửi nó cho bạn bè nhé !"};
