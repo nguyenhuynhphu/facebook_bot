@@ -196,7 +196,7 @@ function handleMessage(sender_psid, received_message) {
     }else if(received_message.text.toLowerCase() === "@newgame"){
       response = Command.handelHelp();
     }else if(received_message.text.toLowerCase() === "@out_room"){
-      response = RoomsHandel.e(sender_psid);
+      response = RoomsHandel.outRoom(sender_psid);
     }else if(received_message.text.toLowerCase().includes("l[") && received_message.text.toLowerCase().includes("]") ){
       setNumberPlayer(sender_psid, received_message.text);
     }else if(received_message.text.toLowerCase().includes("r[") && received_message.text.toLowerCase().includes("]") ){
