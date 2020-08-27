@@ -64,7 +64,7 @@ module.exports = class RoomsHandel {
     static createRoom(sender_psid){
         let responseMessage;
         var playerTmp = playersHandel.checkPlayerExits(sender_psid); //lấy user đang sử dụng Bot trong hệ thống để kiểm tra nó ở phòng nào
-        if(playerTmp.room != null){
+        if(playerTmp.room == null){
             if(this.getRoomBySender(sender_psid) == undefined){ //kiểm tra thằng này có sở hữu phòng nào chưas
                 let roomid;
                 do {
