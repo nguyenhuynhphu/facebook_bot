@@ -74,7 +74,7 @@ module.exports = class RoomsHandel {
             let tempPlayer = new Player(sender_psid, true, true, "", roomid);
             //insert admin to room and add room to gameRoomArray
             room.players.push(tempPlayer);
-        
+            playersHandel.checkPlayerExits(sender_psid).room = roomid;
             this.addRoom(sender_psid, room);
             responseMessage = { "text": "You have created a game, your room ID is: "+ roomid};
         
