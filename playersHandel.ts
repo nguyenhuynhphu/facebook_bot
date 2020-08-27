@@ -39,6 +39,7 @@ module.exports = class PlayersHandel {
         this.playersInSystem.forEach(element => {
             tmp += this.showPlayerInfo(element) + "\n";
         });
+        console.log(this.playersInSystem);
         return tmp;
     }
     

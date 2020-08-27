@@ -113,9 +113,9 @@ module.exports = class RoomsHandel {
         var player = playersHandel.checkPlayerExits(sender);
         if(player.room != null){
             var room = this.getRoomByRoomID(player.room);
-
             var responseMessage = { text: "You been remove !"};
             if (room != undefined){
+                player.room = null;
                 for(var i = 0; i < room.players.length; i++){
                     if(room.players[i].id.toString() == sender.toString()){
                         _.pull(room.players, room.players[i]);
