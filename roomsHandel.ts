@@ -182,9 +182,8 @@ module.exports = class RoomsHandel {
 
 
     static checkRoomState(room){
-        let response = {text: `OK`};
         if(room.number_player == null){
-          response = { text: "Please Enter Number of player: (Gửi với dạng: L[Số người chơi], Ví dụ L[8]" }
+          return { text: "Please Enter Number of player: (Gửi với dạng: L[Số người chơi], Ví dụ L[8]" }
         }
         // if(room.players == null){
         //   return "NO_PLAYER_IN_ROOM";
@@ -196,7 +195,7 @@ module.exports = class RoomsHandel {
         //   }
         // }
         if(room.usingRole.length == 0){
-          response = { 
+            return { 
             text: `
               Nói cho mình biết trò chơi của bạn sẽ có chức năng gì đặc biệt ?
         Cú pháp: R[x, x, x...]
@@ -212,12 +211,12 @@ module.exports = class RoomsHandel {
           // }
         }
         if(!this.isValidRole(room.usingRole)){
-          response = { 
-            text: `Các vai trò bạn chọn chưa có sói, bạn chọn lại giúp mình nhé` 
-          }
+            return { 
+                text: `Các vai trò bạn chọn chưa có sói, bạn chọn lại giúp mình nhé` 
+            }
         }
       
-        return response;
+        return {text: `OK`};
       }
       
     static isValidRole(roles){
