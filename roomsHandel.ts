@@ -80,14 +80,14 @@ module.exports = class RoomsHandel {
                 while (this.getRoomByRoomID(roomid) != undefined);
             
                 //tao phong
-                let room = new Room(roomid, 10, [], sender_psid.toString(), null, null, []);
+                let room = new Room(roomid, 10, [], sender_psid.toString(), null, null, [], false);
                 //tao admin
                 //insert admin to room and add room to gameRoomArray
                 room.players.push(sender_psid);
                 playersHandel.checkPlayerExits(sender_psid).room = roomid;
                 this.addRoom(sender_psid, room);
                 responseMessage = { "text": "Bạn đã tạo 1 phòng chơi, ID của phòng là: " + roomid + ", gửi nó cho bạn bè nhé !"};
-            
+                this.checkRoomState(room);
             }else{
                 responseMessage = { "text": "Bạn đang làm chủ 1 phòng" };
             }
@@ -101,6 +101,8 @@ module.exports = class RoomsHandel {
     //tham gia phòng khi đang trong phòng khác - X
     //tham gia rồi tham gia nửa - X
     //vào rồi đòi vào nửa - X
+    //game đang chơi thì tham gia phòng - N
+    
     static joinRoom(sender, text){
         let responseMessage;
         var msg = text.toLowerCase();
@@ -129,7 +131,8 @@ module.exports = class RoomsHandel {
     }
     //chưa vào phòng nào mà out - X
     //out phòng bth - Y
-    //nếu admin rời khỏi phòng, xóa phòng đi, thông báo là phòng đã bị hủy - N
+    //nếu admin rời khỏi phòng, xóa phòng đi, thông báo là phòng đã bị hủy - Y
+    //game đang chơi thì out - N
     static outRoom(sender){
         var player = playersHandel.checkPlayerExits(sender);
         var responseMessage;
@@ -164,6 +167,93 @@ module.exports = class RoomsHandel {
         }
         return responseMessage;
         
+    }
+
+    static startGame(sender){
+        let response;
+        let room = this.getRoomBySender(sender);
+        response = this.checkRoomState(room);
+        if(response.text == "OK"){
+            room.isStart = true;
+        }
+        return response;
+    }
+
+
+
+    static checkRoomState(room){
+        let response = {text: `OK`};
+        if(room.number_player == null){
+          response = { text: "Please Enter Number of player: (Gửi với dạng: L[Số người chơi], Ví dụ L[8]" }
+        }
+        // if(room.players == null){
+        //   return "NO_PLAYER_IN_ROOM";
+        // }else{
+        //   if(room.players.length < room.number_player){
+        //     response = { "text": `Not enough player, ${room.players.length}/${room.number_player}` }
+        //     callSendAPI(sender_psid, response);
+        //     return "NOT_ENOUGN_PLAYER";
+        //   }
+        // }
+        if(room.usingRole.length == 0){
+          response = { 
+            text: `
+              Nói cho mình biết trò chơi của bạn sẽ có chức năng gì đặc biệt ?
+        Cú pháp: R[x, x, x...]
+        vói x là id của chức năng
+        Ví dụ: R[1, 2, 3]
+        Mình sẽ nhập số lượng sau nhé !
+        Nếu bạn không nhớ id của chức năng, gửi @role_all để mình giúp bạn !
+            ` 
+          }
+        }else{
+          // if(room.usingRole.length < room.number_player){ 
+          //   return "NOT_ENOUGH_ROLE_FOR_PLAYER";
+          // }
+        }
+        if(!this.isValidRole(room.usingRole)){
+          response = { 
+            text: `Các vai trò bạn chọn chưa có sói, bạn chọn lại giúp mình nhé` 
+          }
+        }
+      
+        return response;
+      }
+      
+    static isValidRole(roles){
+    // hàm này đang set cứng  cho sói thường, 
+    //cần update để có thể handel tất cả các sói
+    let vaild = false;
+    roles.forEach(role => {
+        if(role == "6".toLowerCase()){
+            vaild = true;
+        }
+    });
+    return vaild;
+    }
+      
+    static setNumberPlayer(sender_psid, received_message){
+        var room = RoomsHandel.getRoomBySender(sender_psid.toString());
+        if(room != undefined){
+            var msg = received_message.toLowerCase();
+            msg = msg.slice(2, msg.lastIndexOf("]"));
+            room.number_player = Number.parseInt(msg);
+        }
+    }
+  
+    static setRoles(sender_psid, received_message){
+        var room = RoomsHandel.getRoomBySender(sender_psid.toString());
+        room.usingRole = [];
+        if(room != undefined){
+        var msg = received_message.toLowerCase();
+        msg = msg.slice(2, msg.lastIndexOf("]"));
+        let tmp = [];
+        msg.split(",").forEach(element => {
+            tmp.push(element.trim());
+        });
+        room.usingRole = tmp.filter((item, i, ar) => ar.indexOf(item) === i);
+        console.log("SET ROLES", room);
+        }
     }
       
 
