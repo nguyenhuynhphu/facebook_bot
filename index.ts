@@ -245,15 +245,11 @@ function handlePostback(sender_psid, received_postback) {
   const payload = received_postback.payload;
   if (payload === '@_Join') {
     response = { "text": "You join a game, send me your key: " };
-    callSendAPI(sender_psid, response);
   } else if (payload === '@_Create') {
     // random id phòng -> trả về key
     response = RoomsHandel.createRoom(sender_psid);
-    callSendAPI(sender_psid, response);
-    setTimeout(function () {
-      response = RoomsHandel.createRoom(sender_psid);
-    }, 1000);
   }
+  callSendAPI(sender_psid, response);
 
 }
 

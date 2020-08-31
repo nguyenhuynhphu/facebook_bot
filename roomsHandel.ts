@@ -225,8 +225,8 @@ module.exports = class RoomsHandel {
                 text: `Các vai trò bạn chọn chưa có sói, bạn chọn lại giúp mình nhé` 
             }
         }
-        return {text: `OK`};
-      }
+        return {text: `Đã sẵn sàng để bắt đầu !`};
+    }
       
     static isValidRole(roles){
     // hàm này đang set cứng  cho sói thường, 
@@ -239,9 +239,11 @@ module.exports = class RoomsHandel {
     });
     return vaild;
     }
-      
+
+
+    //chưa handel cú pháp 
     static setNumberPlayer(sender_psid, received_message){
-        var room = RoomsHandel.getRoomBySender(sender_psid.toString());
+        var room = this.getRoomBySender(sender_psid.toString());
         if(room != undefined){
             var msg = received_message.toLowerCase();
             msg = msg.slice(2, msg.lastIndexOf("]"));
@@ -249,20 +251,42 @@ module.exports = class RoomsHandel {
         }
     }
   
+    //chưa handel cú pháp
     static setRoles(sender_psid, received_message){
-        var room = RoomsHandel.getRoomBySender(sender_psid.toString());
+        var room = this.getRoomBySender(sender_psid.toString());
         room.usingRole = [];
         if(room != undefined){
-        var msg = received_message.toLowerCase();
-        msg = msg.slice(2, msg.lastIndexOf("]"));
-        let tmp = [];
-        msg.split(",").forEach(element => {
-            tmp.push(element.trim());
-        });
-        room.usingRole = tmp.filter((item, i, ar) => ar.indexOf(item) === i);
-        console.log("SET ROLES", room);
+            var msg = received_message.toLowerCase();
+            msg = msg.slice(2, msg.lastIndexOf("]"));
+            let tmp = [];
+            msg.split(",").forEach(element => {
+                tmp.push(element.trim());
+            });
+            room.usingRole = tmp.filter((item, i, ar) => ar.indexOf(item) === i);
         }
     }
       
+    // static configReq = ["NUMBER_PLAYER", "USING_ROLE", "VAILD_ROLE", "OK"];
+    // static async configState(sender, received_message, callAPI){
+    //     var room = this.getRoomBySender(sender);
+    //     if(room){
+    //         let state = "";
+    //         while((state = this.configReq[0]) != "OK"){
+    //             let response;
+    //             if(state == "NUMBER_PLAYER"){
+    //                 response = this.setNumberPlayer(sender, received_message);
+    //             }else if(state == "USING_ROLE"){
+    //                 response = this.setRoles(sender, received_message);
+    //             }else if(state == "VAILD_ROLE"){
+
+    //             }
+    //             callAPI(sender, response)
+    //         }
+    //         // for (let i = 0; i < this.configReq.length; i++) {
+    //         //     const state = this.configReq[i];
+
+    //         // }
+    //     }
+    // }
 
 }
