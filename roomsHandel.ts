@@ -187,6 +187,8 @@ module.exports = class RoomsHandel {
         let response;
         let room = this.getRoomBySender(sender);
         response = this.checkRoomState(room);
+        console.log(response);
+        console.log("startGame")
         if(response.text == "OK"){
             room.isStart = true;
         }
