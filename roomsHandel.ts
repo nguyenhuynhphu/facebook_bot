@@ -87,7 +87,7 @@ module.exports = class RoomsHandel {
                 playersHandel.checkPlayerExits(sender_psid).room = roomid;
                 this.addRoom(sender_psid, room);
                 responseMessage = { "text": "Bạn đã tạo 1 phòng chơi, ID của phòng là: " + roomid + ", gửi nó cho bạn bè nhé !"};
-                this.checkRoomState(room);
+                this.startGame(sender_psid);
             }else{
                 responseMessage = { "text": "Bạn đang làm chủ 1 phòng" };
             }
@@ -174,9 +174,9 @@ module.exports = class RoomsHandel {
         if(room != null){
             var tmp = `
                 RoomID: ${room.roomId}
-                Number Player: ${room.number_player}
-                Admin: ${room.adminId}
-                Using Role: ${room.usingRole}
+            Number Player: ${room.number_player}
+            Admin: ${room.adminId}
+            Using Role: ${room.usingRole}
             `
             return {text: tmp}
         }
@@ -237,6 +237,7 @@ module.exports = class RoomsHandel {
             vaild = true;
         }
     });
+    
     return vaild;
     }
 
@@ -248,6 +249,7 @@ module.exports = class RoomsHandel {
             var msg = received_message.toLowerCase();
             msg = msg.slice(2, msg.lastIndexOf("]"));
             room.number_player = Number.parseInt(msg);
+            this.startGame(sender_psid);
         }
     }
   
@@ -263,30 +265,9 @@ module.exports = class RoomsHandel {
                 tmp.push(element.trim());
             });
             room.usingRole = tmp.filter((item, i, ar) => ar.indexOf(item) === i);
+            this.startGame(sender_psid);
         }
     }
       
-    // static configReq = ["NUMBER_PLAYER", "USING_ROLE", "VAILD_ROLE", "OK"];
-    // static async configState(sender, received_message, callAPI){
-    //     var room = this.getRoomBySender(sender);
-    //     if(room){
-    //         let state = "";
-    //         while((state = this.configReq[0]) != "OK"){
-    //             let response;
-    //             if(state == "NUMBER_PLAYER"){
-    //                 response = this.setNumberPlayer(sender, received_message);
-    //             }else if(state == "USING_ROLE"){
-    //                 response = this.setRoles(sender, received_message);
-    //             }else if(state == "VAILD_ROLE"){
-
-    //             }
-    //             callAPI(sender, response)
-    //         }
-    //         // for (let i = 0; i < this.configReq.length; i++) {
-    //         //     const state = this.configReq[i];
-
-    //         // }
-    //     }
-    // }
 
 }
