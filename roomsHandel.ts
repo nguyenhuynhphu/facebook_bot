@@ -80,7 +80,7 @@ module.exports = class RoomsHandel {
                 while (this.getRoomByRoomID(roomid) != undefined);
             
                 //tao phong
-                let room = new Room(roomid, 10, [], sender_psid.toString(), null, null, [], false);
+                let room = new Room(roomid, null, [], sender_psid.toString(), null, null, [], false);
                 //tao admin
                 //insert admin to room and add room to gameRoomArray
                 room.players.push(sender_psid);
@@ -169,6 +169,20 @@ module.exports = class RoomsHandel {
         
     }
 
+    static getRoomInformation(sender){
+        var room = this.getRoomBySender(sender);
+        if(room != null){
+            var tmp = `
+                RoomID: ${room.roomId}
+                Number Player: ${room.number_player}
+                Admin: ${room.adminId}
+                Using Role: ${room.usingRole}
+            `
+            return {text: tmp}
+        }
+        return {text: "Bạn không sở hữu phòng nào !"}
+    }
+
     static startGame(sender){
         let response;
         let room = this.getRoomBySender(sender);
@@ -205,17 +219,12 @@ module.exports = class RoomsHandel {
         Nếu bạn không nhớ id của chức năng, gửi @role_all để mình giúp bạn !
             ` 
           }
-        }else{
-          // if(room.usingRole.length < room.number_player){ 
-          //   return "NOT_ENOUGH_ROLE_FOR_PLAYER";
-          // }
         }
         if(!this.isValidRole(room.usingRole)){
             return { 
                 text: `Các vai trò bạn chọn chưa có sói, bạn chọn lại giúp mình nhé` 
             }
         }
-      
         return {text: `OK`};
       }
       

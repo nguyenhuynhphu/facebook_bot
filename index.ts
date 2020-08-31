@@ -194,6 +194,8 @@ function handleMessage(sender_psid, received_message) {
     }else if(received_message.text.toLowerCase() === "@disconnect"){
       // PlayersHandel.removePlayer(sender_psid);
       // response = {"text": "Disconnect Success !"};
+    }else if(received_message.text.toLowerCase() === "@my_room"){
+      response = RoomsHandel.getRoomInformation(sender_psid);
     }else if(received_message.text.toLowerCase() === "@help"){
       response = Command.handelHelp();
     }else if(received_message.text.toLowerCase() === "@newgame"){
