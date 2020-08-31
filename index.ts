@@ -46,7 +46,7 @@ app.post('/', (req, res) => {
       body.entry.forEach(function(entry) {
         const webhook_event = entry.messaging[0];
         const sender_psid = webhook_event.sender.id;
-        
+        console.log(webhook_event);
         if (webhook_event.message) {
           handleMessage(sender_psid, webhook_event.message);
         } else if (webhook_event.postback) {
@@ -248,6 +248,7 @@ function handlePostback(sender_psid, received_postback) {
   } else if (payload === '@_Create') {
     // random id phòng -> trả về key
     response = RoomsHandel.createRoom(sender_psid);
+    RoomsHandel.startGame(sender_psid);
   }
   callSendAPI(sender_psid, response);
 
