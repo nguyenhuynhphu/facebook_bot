@@ -183,7 +183,7 @@ module.exports = class RoomsHandel {
         return {text: "Bạn không sở hữu phòng nào !"}
     }
 
-    static startGame(sender){
+    static startGame(sender, callAPI){
         let response;
         let room = this.getRoomBySender(sender);
         response = this.checkRoomState(room);
@@ -192,6 +192,7 @@ module.exports = class RoomsHandel {
         if(response.text == "OK"){
             room.isStart = true;
         }
+        callAPI(sender, response);
         return response;
     }
 

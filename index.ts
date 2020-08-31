@@ -64,7 +64,7 @@ app.post('/', (req, res) => {
 
 
 function accessGame(sender_psid){
-  let tmp = new Player(sender_psid, true, false, null, null);
+  let tmp = new Player(sender_psid, true, false, null, null, false);
   PlayersHandel.addPlayer(tmp);
   // Construct the message body
   const request_body = {
@@ -169,10 +169,10 @@ function callSendAPI(sender_psid, response) {
 //4287205711351255
 function handleMessage(sender_psid, received_message) {
   let response;
-  var currentUser = PlayersHandel.checkPlayerExits(sender_psid);
+  var currentUser = PlayersHandel.checkPlayerExits(sender_psid); 
 
-  if(currentUser != undefined){
-    var currentRoom = RoomsHandel.getRoomBySender(sender_psid);
+  if(currentUser != undefined){//có gởi @start chưa
+    var currentRoom = RoomsHandel.getRoomBySender(sender_psid);  //có phải là admin của phòng nào không
 
     if(received_message.text.toLowerCase() === "@all_room"){
       RoomsHandel.showAllRoomInfo();
@@ -199,7 +199,7 @@ function handleMessage(sender_psid, received_message) {
     }else if(received_message.text.toLowerCase() === "@help"){
       response = Command.handelHelp();
     }else if(received_message.text.toLowerCase() === "@newgame"){
-      response = RoomsHandel.startGame(sender_psid);
+      response = RoomsHandel.startGame(sender_psid, callSendAPI);
     }else if(received_message.text.toLowerCase() === "@out_room"){
       response = RoomsHandel.outRoom(sender_psid);
     }else if(received_message.text.toLowerCase().includes("j[") && received_message.text.toLowerCase().includes("]") ){
@@ -248,7 +248,7 @@ function handlePostback(sender_psid, received_postback) {
   } else if (payload === '@_Create') {
     // random id phòng -> trả về key
     response = RoomsHandel.createRoom(sender_psid);
-    RoomsHandel.startGame(sender_psid);
+    RoomsHandel.startGame(sender_psid, callSendAPI);
   }
   callSendAPI(sender_psid, response);
 
